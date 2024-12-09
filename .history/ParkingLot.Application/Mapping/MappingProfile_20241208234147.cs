@@ -1,0 +1,25 @@
+using AutoMapper;
+using ParkingLot.Core.DTOs;
+using ParkingLot.Core.Entities;
+using System.Text.Json;
+using System.Linq;
+
+namespace ParkingLot.Application.Mapping
+{
+    public class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            CreateMap<CreateParkingLotDto, ParkingLot.Core.Entities.ParkingLot>()
+                .ForMember(dest => dest.ContactPhone, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.SlotTypeCapacity, opt => opt.MapFrom(src => 
+                    System.Text.Json.JsonSerializer.Serialize(src.SlotTypes, new JsonSerializerOptions())))
+                .ForMember(dest => dest.HourlyRateByType, opt => opt.MapFrom(src => 
+                    System.Text.Json.JsonSerializer.Serialize(src.PricesByVehicleType, new JsonSerializerOptions())))
+                .ForMember(dest => dest.TotalSlots, opt => opt.MapFrom(src => src.SlotTypes.Values.Sum()))
+                .ForMember(dest => dest.AvailableSlots, opt => opt.MapFrom(src => src.SlotTypes.Values.Sum()))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true));
+        }
+    }
+}

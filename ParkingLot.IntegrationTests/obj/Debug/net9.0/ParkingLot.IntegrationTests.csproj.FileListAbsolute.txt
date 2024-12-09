@@ -1,0 +1,6 @@
+/Users/tedydev/Workhome/parkinglot/ParkingLot.IntegrationTests/obj/Debug/net9.0/ParkingLot.IntegrationTests.csproj.AssemblyReference.cache
+/Users/tedydev/Workhome/parkinglot/ParkingLot.IntegrationTests/obj/Debug/net9.0/MvcTestingAppManifest.json
+/Users/tedydev/Workhome/parkinglot/ParkingLot.IntegrationTests/obj/Debug/net9.0/ParkingLot.IntegrationTests.GeneratedMSBuildEditorConfig.editorconfig
+/Users/tedydev/Workhome/parkinglot/ParkingLot.IntegrationTests/obj/Debug/net9.0/ParkingLot.IntegrationTests.AssemblyInfoInputs.cache
+/Users/tedydev/Workhome/parkinglot/ParkingLot.IntegrationTests/obj/Debug/net9.0/ParkingLot.IntegrationTests.AssemblyInfo.cs
+/Users/tedydev/Workhome/parkinglot/ParkingLot.IntegrationTests/obj/Debug/net9.0/ParkingLot.IntegrationTests.csproj.CoreCompileInputs.cache

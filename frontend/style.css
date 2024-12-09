@@ -1,0 +1,538 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Google Sans", Arial, sans-serif;
+    background-color: #fff;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.geocoder-container {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1030;
+    border-radius: 16px;
+}
+
+.geocoder {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.goong-ctrl-geocoder {
+    min-width: 100% !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    max-width: none !important;
+    border: none !important;
+    background: white;
+}
+
+.mapboxgl-ctrl-geocoder--input {
+    width: 100% !important;
+}
+
+.goong-ctrl-geocoder input[type='text'] {
+    height: 48px !important;
+    padding: 0 45px !important;
+    font-size: 16px !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+
+
+/* Menu Controls */
+#menu {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1030;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    gap: 8px;
+}
+
+.map-control-group {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    height: fit-content;
+    flex-direction: row;
+    overflow: hidden;
+    padding: 0.2rem;
+}
+
+.map-control-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+    padding: 8px;
+}
+
+.map-control-button:hover {
+    background-color: #f1f1f1;
+    color: #1a73e8;
+    border-radius: 16px;
+}
+
+.map-control-button.active {
+    color: #1a73e8;
+    background-color: #e8f0fe;
+    border-radius: 16px;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 400px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    background: white;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateX(-100%);
+}
+
+.sidebar.active,
+.sidebar:not(.collapsed) {
+    transform: translateX(0);
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+.sidebar-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    align-items: center;
+    background: #fff;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #666;
+    transition: background-color 0.3s;
+    rotate: 180deg;
+}
+
+.btn-icon:hover {
+    background-color: #f1f1f1;
+}
+
+.sidebar-content {
+    height: calc(100% - 71px);
+    overflow-y: auto;
+}
+
+.place-details {
+    padding: 20px;
+}
+
+.place-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.place-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #202124;
+    font-weight: 500;
+}
+
+.place-info {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #5f6368;
+    font-size: 14px;
+}
+
+.place-info-buttons .button-container{
+    width: 60px;
+    justify-items: center;
+    align-items: center;
+}
+
+.place-info-buttons button{
+    display: flex;
+    justify-content: space-between; /* Căn đều khoảng cách giữa các nút */
+    gap: 20px; /* Khoảng cách giữa các nút */
+    border-radius: 50%;
+}
+
+.place-info i {
+    font-size: 18px;
+    color: #5f6368;
+}
+
+.button-container .button-label {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.custom-line {
+    height: 1px;
+    background-color: #e6e6e6;
+    margin: 20px 0;
+}
+
+/* Map Type Dropdown */
+#mapTypeDropdown {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    width: 200px;
+    display: none;
+    border-radius: 8px;
+}
+
+#mapTypeDropdown .map-control-button {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0 15px;
+    gap: 10px;
+}
+
+/* Fullscreen styles */
+.fullscreen-enabled {
+    background: #fff;
+}
+
+/* Custom scrollbar */
+.sidebar-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 350px;
+    }
+
+    .geocoder-container {
+        padding-left: 20%;
+    }
+
+    .btn-icon {
+        rotate: 180deg;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: 60vh;
+        bottom: 0;
+        top: auto;
+        transform: translateY(100%);
+    }
+
+    .sidebar.active,
+    .sidebar:not(.collapsed) {
+        transform: translateY(0);
+    }
+
+    .geocoder-container {
+        padding-left: 0;
+    }
+
+    #menu {
+        top: 10px;
+        left: 10px;
+        flex-direction: column;
+    }
+
+    .map-control-group {
+        margin-bottom: 5px;
+        flex-direction: column;
+    }
+
+    .place-image {
+        height: 150px;
+    }
+
+    .place-title {
+        font-size: 1.2rem;
+    }
+
+    .place-info {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .sidebar {
+        height: 70vh;
+    }
+
+    .goong-ctrl-geocoder input[type='text'] {
+        height: 40px !important;
+        font-size: 14px !important;
+        width: 80%;
+    }
+
+    .map-control-button {
+        width: 36px;
+        height: 36px;
+    }
+
+    .place-image {
+        height: 120px;
+    }
+
+    .place-details {
+        padding: 15px;
+    }
+
+    .place-info {
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .sidebar-header {
+        padding: 10px 15px;
+    }
+
+    .btn-icon {
+        width: 35px;
+        height: 35px;
+        rotate: 180deg;
+    }
+}
+
+@media (min-height: 1024px) {
+    .sidebar {
+        height: 50vh;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    .sidebar {
+        height: 80vh;
+    }
+    
+    .place-image {
+        height: 100px;
+    }
+    
+    .place-details {
+        padding: 10px;
+    }
+
+    .sidebar-content {
+        height: calc(100% - 55px);
+    }
+
+    .place-title {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+}
+
+.mapboxgl-ctrl-geocoder {
+    border-radius: 50px !important;
+}
+
+/* Dark mode support */
+/* @media (prefers-color-scheme: dark) {
+    .sidebar,
+    .sidebar-header,
+    .map-control-button,
+    .map-control-group {
+        background: #202124;
+        color: #fff;
+    }
+
+    .place-title {
+        color: #fff;
+    }
+
+    .place-info,
+    .place-info i {
+        color: #9aa0a6;
+    }
+
+    .custom-line {
+        background-color: #3c4043;
+    }
+
+    .btn-icon {
+        color: #9aa0a6;
+    }
+
+    .btn-icon:hover {
+        background-color: #3c4043;
+    }
+} */
+
+/* Styles Control */
+.map-style-switcher {
+    position: relative;
+}
+
+.map-style-switcher button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.map-style-switcher button:hover {
+    background-color: #f1f1f1;
+}
+
+.map-style-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    display: none;
+    margin-top: 5px;
+    min-width: 150px;
+}
+
+.map-style-list.active {
+    display: block;
+}
+
+.map-style-item {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.map-style-item:hover {
+    background-color: #f1f1f1;
+}
+
+.map-style-item.active {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+}
+
+.directions-container {
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    width: 300px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: none;
+    padding: 15px;
+}
+
+.directions-header {
+    padding: 15px;
+    border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.directions-form {
+    padding: 15px;
+}
+
+.route-preview {
+    padding: 15px;
+    border-top: 1px solid #e6e6e6;
+}
+
+.route-preview img {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.directions-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 620px; /* Chiều rộng + padding */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: none; /* Ẩn mặc định */
+    padding: 15px;
+}
+
+.directions-header {
+    padding: 15px;
+    border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.route-preview img {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.parking-marker {
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}

@@ -1,0 +1,6 @@
+{
+  "ParkingLot.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/tedydev\/Workhome\/parkinglot\/ParkingLot.API",
+  "ParkingLot.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/tedydev\/Workhome\/parkinglot\/ParkingLot.Application",
+  "ParkingLot.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/tedydev\/Workhome\/parkinglot\/ParkingLot.Core",
+  "ParkingLot.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/tedydev\/Workhome\/parkinglot\/ParkingLot.Infrastructure"
+}

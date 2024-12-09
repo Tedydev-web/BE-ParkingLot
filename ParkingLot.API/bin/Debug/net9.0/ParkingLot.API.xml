@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ParkingLot.API</name>
+    </assembly>
+    <members>
+        <member name="T:ParkingLot.API.Controllers.AuthenticationController">
+            <summary>
+            Xử lý các hoạt động xác thực
+            </summary>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.AuthenticationController.Register(ParkingLot.API.Models.RegisterModel)">
+            <summary>
+            Đăng ký một người dùng mới
+            </summary>
+            <param name="model">Chi tiết đăng ký người dùng</param>
+            <returns>Kết quả của yêu cầu đăng ký</returns>
+            <response code="201">Người dùng đã đăng ký thành công</response>
+            <response code="400">Nếu đăng ký thất bại</response>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.AuthenticationController.Login(ParkingLot.API.Models.LoginModel)">
+            <summary>
+            Xác thực người dùng và tạo token JWT
+            </summary>
+            <param name="model">Thông tin đăng nhập</param>
+            <returns>Token JWT và thông tin người dùng</returns>
+            <response code="200">Xác thực thành công</response>
+            <response code="401">Thông tin không hợp lệ</response>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.AuthenticationController.RefreshToken">
+            <summary>
+            Làm mới token xác thực
+            </summary>
+            <returns>JWT token mới</returns>
+            <response code="200">Token được làm mới thành công</response>
+            <response code="401">Token không hợp lệ hoặc hết hạn</response>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.ParkingLotController.Create(ParkingLot.Application.DTOs.CreateParkingLotDto)">
+            <summary>
+            Creates a new parking lot
+            </summary>
+            <param name="dto">The parking lot creation details</param>
+            <returns>The newly created parking lot</returns>
+            <response code="201">Returns the newly created parking lot</response>
+            <response code="400">If the item is invalid</response>
+            <response code="401">If the user is not authorized</response>
+            <response code="403">If the user is not an admin</response>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.ParkingLotController.GetAll(ParkingLot.Application.DTOs.ParkingLotFilterDto)">
+            <summary>
+            Gets all parking lots with optional filtering
+            </summary>
+            <param name="filter">Filter parameters</param>
+            <returns>List of parking lots</returns>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.ParkingLotController.GetById(System.String)">
+            <summary>
+            Gets a specific parking lot by id
+            </summary>
+            <param name="id">The parking lot id</param>
+            <returns>The requested parking lot</returns>
+            <response code="200">Returns the requested parking lot</response>
+            <response code="404">If the parking lot is not found</response>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.ParkingLotController.Update(System.String,ParkingLot.Application.DTOs.UpdateParkingLotDto)">
+            <summary>
+            Updates a specific parking lot
+            </summary>
+            <param name="id">The parking lot id</param>
+            <param name="dto">The update details</param>
+            <returns>The updated parking lot</returns>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.ParkingLotController.Delete(System.String)">
+            <summary>
+            Deletes a specific parking lot
+            </summary>
+            <param name="id">The parking lot id to delete</param>
+            <returns>No content on success</returns>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.ParkingLotController.GetAddressFromCoordinates(System.Double,System.Double)">
+            <summary>
+            Gets address details from coordinates
+            </summary>
+            <param name="lat">Latitude</param>
+            <param name="lng">Longitude</param>
+            <returns>Address details from the coordinates</returns>
+        </member>
+        <member name="M:ParkingLot.API.Controllers.ParkingLotController.SearchPlaces(System.String,System.Nullable{System.Double},System.Nullable{System.Double})">
+            <summary>
+            Searches for places based on keyword and optional coordinates
+            </summary>
+            <param name="keyword">Search term</param>
+            <param name="lat">Optional latitude</param>
+            <param name="lng">Optional longitude</param>
+            <returns>Search results</returns>
+        </member>
+    </members>
+</doc>

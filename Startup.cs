@@ -1,0 +1,6 @@
+public void ConfigureServices(IServiceCollection services)
+{
+    // ...existing services...
+    services.AddScoped<IGoongMapService, GoongMapService>();
+    // ...existing services...
+}

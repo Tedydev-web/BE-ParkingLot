@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Add a default marker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script>
+        goongjs.accessToken = 'YJTajS80fLlhJ4a2BG0gXqXXdZzdLG5V3iivOK9e';
+        var map = new goongjs.Map({
+            container: 'map',
+            style: 'https://tiles.goong.io/assets/goong_map_web.json',
+            center: [106.8249641, 10.9446929], // Coordinates for Biên Hòa
+            zoom: 8
+        });
+
+        // Function to fetch parking lots and create markers
+        async function loadParkingLots() {
+            try {
+                const response = await fetch('http://localhost:5133/api/ParkingLot', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors',
+                    cache: 'no-cache'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const parkingLots = await response.json();
+                console.log('Parking lots loaded:', parkingLots); // Debug logging
+                
+                // Create markers for each parking lot
+                parkingLots.forEach(lot => {
+                    console.log('Creating marker for:', lot); // Debug logging
+                    
+                    // Create a default marker element
+                    const el = document.createElement('div');
+                    el.className = 'marker';
+                    el.style.width = '24px';
+                    el.style.height = '24px';
+                    el.style.backgroundImage = 'url(https://docs.goong.io/assets/images/default_marker.png)';
+                    
+                    // Create and add the marker
+                    new goongjs.Marker({
+                        element: el
+                    })
+                    .setLngLat([lot.longitude, lot.latitude])
+                    .setPopup(new goongjs.Popup()
+                        .setHTML(`
+                            <h3>${lot.name}</h3>
+                            <p>${lot.address}</p>
+                            <p>Hourly Rate: ${lot.baseHourlyRate} VND</p>
+                        `))
+                    .addTo(map);
+                });
+            } catch (error) {
+                console.error('Error loading parking lots:', error);
+            }
+        }
+
+        // Load parking lots when the map is ready
+        map.on('load', loadParkingLots);
+    </script>
+
+</body>
+
+</html>
