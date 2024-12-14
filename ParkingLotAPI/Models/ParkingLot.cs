@@ -13,8 +13,8 @@ namespace ParkingLotAPI.Models
         public int TotalSpaces { get; set; }
         public int AvailableSpaces { get; set; }
         public decimal PricePerHour { get; set; }
-        public TimeSpan? OpeningTime { get; set; }
-        public TimeSpan? ClosingTime { get; set; }
+        public TimeSpan? OpeningTime { get; set; } = new TimeSpan(23, 59, 59);
+        public TimeSpan? ClosingTime { get; set; } = new TimeSpan(23, 59, 59);
         public bool IsOpen24Hours { get; set; }
         public List<ParkingLotImage> Images { get; set; }
         public double Rating { get; set; }

@@ -232,6 +232,7 @@ namespace ParkingLotAPI.Services
 
             var results = parkingLots.Select(p => new ParkingLotResponseDto
             {
+                Id = p.Id,
                 Place_id = p.Place_id,
                 Reference = p.Reference,
                 Name = p.Name,

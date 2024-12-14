@@ -5232,24 +5232,33 @@
     ]
   },
   "packageFolders": {
-    "/Users/tedydev/.nuget/packages/": {}
+    "C:\\Users\\ADMIN\\.nuget\\packages\\": {},
+    "D:\\Coder\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/ParkingLotManagement/ParkingLotAPI/ParkingLotAPI.csproj",
+      "projectUniqueName": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\ParkingLotAPI.csproj",
       "projectName": "ParkingLotAPI",
-      "projectPath": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/ParkingLotManagement/ParkingLotAPI/ParkingLotAPI.csproj",
-      "packagesPath": "/Users/tedydev/.nuget/packages/",
-      "outputPath": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/ParkingLotManagement/ParkingLotAPI/obj/",
+      "projectPath": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\ParkingLotAPI.csproj",
+      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+      "outputPath": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "D:\\Coder\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/tedydev/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "D:\\Coder\\Telerik UI for ASP.NET\\wrappers\\aspnetcore\\Binaries\\AspNet.Core": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5326,7 +5335,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
