@@ -14,6 +14,7 @@ public class ParkingLotResponseDto
     public int Available_spaces { get; set; }
     public int Total_spaces { get; set; }
     public double Price_per_hour { get; set; }
+    public string Description { get; set; } 
 }
 
 public class Geometry

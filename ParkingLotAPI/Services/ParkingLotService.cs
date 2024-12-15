@@ -122,7 +122,8 @@ namespace ParkingLotAPI.Services
                 Formatted_phone_number = parkingLot.ContactNumber,
                 Total_spaces = parkingLot.TotalSpaces,
                 Available_spaces = parkingLot.AvailableSpaces,
-                Price_per_hour = (double)parkingLot.PricePerHour
+                Price_per_hour = (double)parkingLot.PricePerHour,
+                Description = parkingLot.Description    
             };
         }
 
@@ -261,7 +262,8 @@ namespace ParkingLotAPI.Services
                 Formatted_phone_number = p.ContactNumber,
                 Total_spaces = p.TotalSpaces,
                 Available_spaces = p.AvailableSpaces,
-                Price_per_hour = (double)p.PricePerHour
+                Price_per_hour = (double)p.PricePerHour,
+                Description = p.Description
             }).ToList();
 
             return new SearchResultDto
