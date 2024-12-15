@@ -36,6 +36,25 @@ public class OpeningHours
 {
     public bool Open_now { get; set; }
     public string[] Weekday_text { get; set; } = Array.Empty<string>();
+    public OperatingTime Operating_hours { get; set; } = new();
+}
+
+public class OperatingTime
+{
+    /// <summary>
+    /// Giờ mở cửa, format: "HH:mm" hoặc "24/7" hoặc "Chưa cập nhật"
+    /// </summary>
+    public string Open { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Giờ đóng cửa, format: "HH:mm" hoặc "24/7" hoặc "Chưa cập nhật"
+    /// </summary>
+    public string Close { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Mở cửa 24/7
+    /// </summary>
+    public bool Is24Hours { get; set; }
 }
 
 public class Photo
