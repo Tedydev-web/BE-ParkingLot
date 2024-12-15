@@ -13,7 +13,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ParkingLotAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+631c7e56fa8b414d7f206c1202395e64db706158")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d25678f6d8e191d12cffb8356f8eea7210c4543")]
+>>>>>>> hotfix-api-SEARCH-ParkingLot
 [assembly: System.Reflection.AssemblyProductAttribute("ParkingLotAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ParkingLotAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

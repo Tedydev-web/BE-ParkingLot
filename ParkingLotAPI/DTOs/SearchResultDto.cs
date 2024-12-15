@@ -1,17 +1,14 @@
 public class SearchResultDto
 {
-    public string Status { get; set; } = "OK";
-    public string Message { get; set; } = string.Empty;
-    public List<ParkingLotResponseDto> Results { get; set; } = new List<ParkingLotResponseDto>();
-    public SearchMetadata Metadata { get; set; } = new SearchMetadata
-    {
-        Total = 0,
-        Limit = 10
-    };
+    public string Status { get; set; } = string.Empty;
+    public string Message { get; set; }
+    public List<ParkingLotResponseDto> Results { get; set; } = new();
+    public SearchMetadata Metadata { get; set; }
 }
 
 public class SearchMetadata
 {
     public int Total { get; set; }
     public int Limit { get; set; }
+    public Dictionary<string, object> Extra { get; set; } = new();
 } 

@@ -18,6 +18,7 @@ public class ParkingLotResponseDto
     public bool IsOpen24Hours { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public double Distance { get; set; }
 }
 
 public class Geometry
@@ -34,6 +35,10 @@ public class Location
 public class OpeningHours
 {
     public bool Open_now { get; set; }
+<<<<<<< HEAD
+=======
+    public string[] Weekday_text { get; set; } = Array.Empty<string>();
+>>>>>>> hotfix-api-SEARCH-ParkingLot
     public OperatingTime Operating_hours { get; set; } = new();
 }
 

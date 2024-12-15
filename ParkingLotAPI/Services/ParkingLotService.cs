@@ -37,6 +37,7 @@ namespace ParkingLotAPI.Services
         {
             try 
             {
+<<<<<<< HEAD
                 var parkingLots = await _context.ParkingLots
                     .Include(p => p.Images)
                     .Where(p => CalculateDistance(latitude, longitude, p.Latitude, p.Longitude) <= radius)
@@ -56,10 +57,56 @@ namespace ParkingLotAPI.Services
                     Place_id = p.Id,
                     Name = p.Name,
                     Formatted_address = p.Address,
+=======
+                // Lấy danh sách bãi đỗ xe trong bán kính
+                var parkingLots = await _context.ParkingLots
+                    .Include(p => p.Images)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                // Tính toán và lọc theo khoảng cách
+                var nearbyParkingLots = parkingLots
+                    .Select(p => new
+                    {
+                        ParkingLot = p,
+                        Distance = CalculateDistance(latitude, longitude, p.Latitude, p.Longitude)
+                    })
+                    .Where(x => x.Distance <= radius)
+                    .OrderBy(x => x.Distance)
+                    .ToList();
+
+                if (!nearbyParkingLots.Any())
+                {
+                    return new SearchResultDto
+                    {
+                        Status = "ZERO_RESULTS",
+                        Message = "Không tìm thấy bãi đỗ xe nào trong khu vực",
+                        Results = new List<ParkingLotResponseDto>(),
+                        Metadata = new SearchMetadata
+                        {
+                            Total = 0,
+                            Limit = 0
+                        }
+                    };
+                }
+
+                // Lấy base URL từ configuration
+                var baseUrl = _configuration.GetValue<string>("BaseUrl") ?? "http://localhost:8000";
+                baseUrl = baseUrl.TrimEnd('/');
+                
+                var results = nearbyParkingLots.Select(x => new ParkingLotResponseDto
+                {
+                    Id = x.ParkingLot.Id,
+                    Place_id = x.ParkingLot.Place_id,
+                    Reference = x.ParkingLot.Reference,
+                    Name = x.ParkingLot.Name,
+                    Formatted_address = x.ParkingLot.Address,
+>>>>>>> hotfix-api-SEARCH-ParkingLot
                     Geometry = new Geometry
                     {
                         Location = new Location
                         {
+<<<<<<< HEAD
                             Lat = p.Latitude,
                             Lng = p.Longitude
                         }
@@ -76,12 +123,64 @@ namespace ParkingLotAPI.Services
                     Total_spaces = p.TotalSpaces,
                     Available_spaces = p.AvailableSpaces,
                     Price_per_hour = p.PricePerHour
+=======
+                            Lat = x.ParkingLot.Latitude,
+                            Lng = x.ParkingLot.Longitude
+                        }
+                    },
+                    Types = new[] { "parking" },
+                    Rating = x.ParkingLot.Rating,
+                    Opening_hours = new OpeningHours
+                    {
+                        Open_now = x.ParkingLot.IsOpen24Hours || IsOpenNow(x.ParkingLot.OpeningTime, x.ParkingLot.ClosingTime, x.ParkingLot.IsOpen24Hours),
+                        Weekday_text = new[]
+                        {
+                            $"Giờ mở cửa: {(x.ParkingLot.IsOpen24Hours ? "24/7" : $"{x.ParkingLot.OpeningTime:hh\\:mm} - {x.ParkingLot.ClosingTime:hh\\:mm}")}"
+                        }
+                    },
+                    Photos = x.ParkingLot.Images?
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.CreatedAt)
+                        .Select(img => new Photo
+                        {
+                            Photo_reference = $"{baseUrl}{img.ImageUrl}",
+                            IsMain = img.IsMain,
+                            CreatedAt = img.CreatedAt
+                        })
+                        .ToList() ?? new List<Photo>(),
+                    Formatted_phone_number = x.ParkingLot.ContactNumber,
+                    Total_spaces = x.ParkingLot.TotalSpaces,
+                    Available_spaces = x.ParkingLot.AvailableSpaces,
+                    Price_per_hour = x.ParkingLot.PricePerHour,
+                    Description = x.ParkingLot.Description,
+                    IsOpen24Hours = x.ParkingLot.IsOpen24Hours,
+                    CreatedAt = x.ParkingLot.CreatedAt,
+                    UpdatedAt = x.ParkingLot.UpdatedAt,
+                    Distance = Math.Round(x.Distance, 2)
+>>>>>>> hotfix-api-SEARCH-ParkingLot
                 }).ToList();
 
                 return new SearchResultDto
                 {
                     Status = "OK",
+<<<<<<< HEAD
                     Results = results
+=======
+                    Message = $"Tìm thấy {results.Count} bãi đỗ xe trong bán kính {radius}m",
+                    Results = results,
+                    Metadata = new SearchMetadata
+                    {
+                        Total = results.Count,
+                        Limit = results.Count,
+                        Extra = new Dictionary<string, object>
+                        {
+                            { "radius", radius },
+                            { "center", new { latitude, longitude } },
+                            { "min_distance", results.Min(r => r.Distance) },
+                            { "max_distance", results.Max(r => r.Distance) }
+                        }
+                    }
+>>>>>>> hotfix-api-SEARCH-ParkingLot
                 };
             }
             catch (Exception ex)
@@ -193,12 +292,22 @@ namespace ParkingLotAPI.Services
             return await GetParkingLotById(parkingLot.Id);
         }
 
-        private static bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime)
+        private bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime, bool isOpen24Hours)
         {
+            if (isOpen24Hours)
+                return true;
+
             if (!openingTime.HasValue || !closingTime.HasValue)
                 return false;
             
             var now = DateTime.Now.TimeOfDay;
+            
+            // Xử lý trường hợp qua ngày
+            if (closingTime.Value < openingTime.Value)
+            {
+                return now >= openingTime.Value || now <= closingTime.Value;
+            }
+
             return now >= openingTime.Value && now <= closingTime.Value;
         }
 
@@ -262,7 +371,18 @@ namespace ParkingLotAPI.Services
                     },
                     Rating = p.Rating,
                     Types = new[] { "parking" },
+<<<<<<< HEAD
                     Opening_hours = BuildOpeningHours(p),
+=======
+                    Opening_hours = new OpeningHours
+                    {
+                        Open_now = p.IsOpen24Hours || IsOpenNow(p.OpeningTime, p.ClosingTime, p.IsOpen24Hours),
+                        Weekday_text = new[]
+                        {
+                            $"Giờ mở cửa: {(p.IsOpen24Hours ? "24/7" : $"{p.OpeningTime:hh\\:mm} - {p.ClosingTime:hh\\:mm}")}"
+                        }
+                    },
+>>>>>>> hotfix-api-SEARCH-ParkingLot
                     Photos = p.Images?
                         .OrderByDescending(img => img.IsMain)
                         .ThenBy(img => img.CreatedAt)
@@ -356,7 +476,7 @@ namespace ParkingLotAPI.Services
             if (parkingLot == null)
                 throw new KeyNotFoundException("Không tìm thấy bãi đỗ xe");
 
-            // Xóa các file ảnh
+            // Xóa các file ��nh
             if (parkingLot.Images != null && parkingLot.Images.Any())
             {
                 foreach (var image in parkingLot.Images)
@@ -373,47 +493,108 @@ namespace ParkingLotAPI.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<SearchResultDto> SearchNearbyParkingLots(
-            double latitude, 
-            double longitude, 
-            int radius,
-            int limit)
+        public async Task<SearchResultDto> SearchNearbyParkingLots(double latitude, double longitude, int radius, int limit)
         {
-            // Đầu tiên, lấy tất cả bãi đỗ xe về bộ nhớ
-            var parkingLots = await _context.ParkingLots
-                .Include(p => p.Images)
-                .AsNoTracking()
-                .ToListAsync();
-
-            // Sau đó lọc và sắp xếp trong bộ nhớ
-            var nearbyParkingLots = parkingLots
-                .Select(p => new 
-                { 
-                    ParkingLot = p, 
-                    Distance = CalculateDistance(latitude, longitude, p.Latitude, p.Longitude) 
-                })
-                .Where(x => x.Distance <= radius)
-                .OrderBy(x => x.Distance)
-                .Take(limit)
-                .Select(x => x.ParkingLot)
-                .ToList();
-
-            if (!nearbyParkingLots.Any())
+            try
             {
-                return new SearchResultDto 
-                { 
-                    Status = "ZERO_RESULTS", 
-                    Results = new List<ParkingLotResponseDto>(),
+                // Lấy tất cả parking lots từ DB
+                var parkingLots = await _context.ParkingLots
+                    .Include(p => p.Images)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                // Tính khoảng cách và lọc theo radius
+                var nearbyParkingLots = parkingLots
+                    .Select(p => new
+                    {
+                        ParkingLot = p,
+                        Distance = CalculateDistance(latitude, longitude, p.Latitude, p.Longitude)
+                    })
+                    .Where(x => x.Distance <= radius) // Lọc trong phạm vi radius
+                    .OrderBy(x => x.Distance) // Sắp xếp theo khoảng cách gần nhất
+                    .Take(limit)
+                    .ToList();
+
+                if (!nearbyParkingLots.Any())
+                {
+                    return new SearchResultDto
+                    {
+                        Status = "ZERO_RESULTS",
+                        Message = $"Không tìm thấy bãi đỗ xe nào trong bán kính {radius}m",
+                        Results = new List<ParkingLotResponseDto>(),
+                        Metadata = new SearchMetadata
+                        {
+                            Total = 0,
+                            Limit = limit,
+                            Extra = new Dictionary<string, object>
+                            {
+                                { "radius", radius },
+                                { "center", new { latitude, longitude } }
+                            }
+                        }
+                    };
+                }
+
+                var baseUrl = $"{_configuration["BaseUrl"]}".TrimEnd('/');
+
+                var results = nearbyParkingLots.Select(x => new ParkingLotResponseDto
+                {
+                    Id = x.ParkingLot.Id,
+                    Place_id = x.ParkingLot.Place_id,
+                    Reference = x.ParkingLot.Reference,
+                    Name = x.ParkingLot.Name,
+                    Formatted_address = x.ParkingLot.Address,
+                    Geometry = new Geometry
+                    {
+                        Location = new Location
+                        {
+                            Lat = x.ParkingLot.Latitude,
+                            Lng = x.ParkingLot.Longitude
+                        }
+                    },
+                    Types = new[] { "parking" },
+                    Rating = x.ParkingLot.Rating,
+                    Opening_hours = BuildOpeningHours(x.ParkingLot),
+                    Photos = x.ParkingLot.Images?
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.CreatedAt)
+                        .Select(img => new Photo
+                        {
+                            Photo_reference = $"{baseUrl}{img.ImageUrl}",
+                            IsMain = img.IsMain,
+                            CreatedAt = img.CreatedAt
+                        })
+                        .ToList() ?? new List<Photo>(),
+                    Formatted_phone_number = x.ParkingLot.ContactNumber,
+                    Total_spaces = x.ParkingLot.TotalSpaces,
+                    Available_spaces = x.ParkingLot.AvailableSpaces,
+                    Price_per_hour = x.ParkingLot.PricePerHour,
+                    Description = x.ParkingLot.Description,
+                    Distance = Math.Round(x.Distance, 2) // Thêm khoảng cách vào response
+                }).ToList();
+
+                return new SearchResultDto
+                {
+                    Status = "OK",
+                    Message = $"Tìm thấy {results.Count} bãi đỗ xe trong bán kính {radius}m",
+                    Results = results,
                     Metadata = new SearchMetadata
                     {
-                        Total = 0,
-                        Limit = limit
+                        Total = results.Count,
+                        Limit = limit,
+                        Extra = new Dictionary<string, object>
+                        {
+                            { "radius", radius },
+                            { "center", new { latitude, longitude } },
+                            { "min_distance", results.Min(r => r.Distance) },
+                            { "max_distance", results.Max(r => r.Distance) }
+                        }
                     }
                 };
             }
-
-            var results = nearbyParkingLots.Select(p => new ParkingLotResponseDto
+            catch (Exception ex)
             {
+<<<<<<< HEAD
                 Place_id = p.Place_id,
                 Name = p.Name,
                 Formatted_address = p.Address,
@@ -449,6 +630,11 @@ namespace ParkingLotAPI.Services
                     Limit = limit
                 }
             };
+=======
+                _logger.LogError(ex, "Lỗi khi tìm kiếm bãi đỗ xe gần đây: {Message}", ex.Message);
+                throw;
+            }
+>>>>>>> hotfix-api-SEARCH-ParkingLot
         }
 
         private TimeSpan? ParseTimeString(string timeString)
@@ -542,6 +728,93 @@ namespace ParkingLotAPI.Services
 
                 try
                 {
+<<<<<<< HEAD
+                    // Format với invariant culture để tránh lỗi locale
+                    return time.Value.ToString(@"hh\:mm", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    _logger.LogWarning("Không thể format thời gian {Time} cho parking lot {Id}", 
+                        time, parkingLot.Id);
+                    return "Chưa cập nhật";
+                }
+            }
+
+            bool isOpen;
+            try
+            {
+                isOpen = IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime, parkingLot.IsOpen24Hours);
+            }
+            catch
+            {
+                _logger.LogWarning("Lỗi khi kiểm tra trạng thái mở cửa cho parking lot {Id}", parkingLot.Id);
+                isOpen = false;
+            }
+
+            return new OpeningHours
+            {
+                Open_now = isOpen,
+                Operating_hours = new OperatingTime
+=======
+                    Location = new Location
+                    {
+                        Lat = parkingLot.Latitude,
+                        Lng = parkingLot.Longitude
+                    }
+                },
+                Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
+                Rating = parkingLot.Rating,
+                Opening_hours = BuildOpeningHours(parkingLot),
+                Photos = parkingLot.Images?.Select(img => new Photo
+>>>>>>> hotfix-api-SEARCH-ParkingLot
+                {
+                    Open = FormatTime(parkingLot.OpeningTime),
+                    Close = FormatTime(parkingLot.ClosingTime),
+                    Is24Hours = parkingLot.IsOpen24Hours
+                }
+            };
+        }
+
+<<<<<<< HEAD
+        private bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime, bool isOpen24Hours)
+        {
+            if (isOpen24Hours)
+                return true;
+
+            if (!openingTime.HasValue || !closingTime.HasValue)
+                return false;
+
+            try
+            {
+                var now = DateTime.Now.TimeOfDay;
+                
+                // Xử lý trường hợp qua ngày
+                if (closingTime.Value < openingTime.Value)
+                {
+                    return now >= openingTime.Value || now <= closingTime.Value;
+                }
+
+                return now >= openingTime.Value && now <= closingTime.Value;
+            }
+            catch
+            {
+                _logger.LogWarning("Lỗi khi so sánh thời gian: opening={Opening}, closing={Closing}", 
+                    openingTime, closingTime);
+                return false;
+            }
+=======
+        private OpeningHours BuildOpeningHours(ParkingLot parkingLot)
+        {
+            string FormatTime(TimeSpan? time)
+            {
+                if (parkingLot.IsOpen24Hours)
+                    return "24/7";
+
+                if (!time.HasValue)
+                    return "Chưa cập nhật";
+
+                try
+                {
                     // Format với invariant culture để tránh lỗi locale
                     return time.Value.ToString(@"hh\:mm", System.Globalization.CultureInfo.InvariantCulture);
                 }
@@ -574,34 +847,7 @@ namespace ParkingLotAPI.Services
                     Is24Hours = parkingLot.IsOpen24Hours
                 }
             };
-        }
-
-        private bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime, bool isOpen24Hours)
-        {
-            if (isOpen24Hours)
-                return true;
-
-            if (!openingTime.HasValue || !closingTime.HasValue)
-                return false;
-
-            try
-            {
-                var now = DateTime.Now.TimeOfDay;
-                
-                // Xử lý trường hợp qua ngày
-                if (closingTime.Value < openingTime.Value)
-                {
-                    return now >= openingTime.Value || now <= closingTime.Value;
-                }
-
-                return now >= openingTime.Value && now <= closingTime.Value;
-            }
-            catch
-            {
-                _logger.LogWarning("Lỗi khi so sánh thời gian: opening={Opening}, closing={Closing}", 
-                    openingTime, closingTime);
-                return false;
-            }
+>>>>>>> hotfix-api-SEARCH-ParkingLot
         }
     }
 } 
