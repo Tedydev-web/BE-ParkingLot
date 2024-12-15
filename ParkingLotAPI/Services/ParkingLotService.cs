@@ -93,14 +93,60 @@ namespace ParkingLotAPI.Services
 
         public async Task<ParkingLotResponseDto> GetParkingLotById(string id)
         {
-            var parkingLot = await _context.ParkingLots
-                .Include(p => p.Images)
-                .FirstOrDefaultAsync(p => p.Id == id);
+            try
+            {
+                var parkingLot = await _context.ParkingLots
+                    .Include(p => p.Images)
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (parkingLot == null)
-                return null;
+                if (parkingLot == null)
+                    return null;
 
-            return MapToResponseDto(parkingLot);
+                var baseUrl = $"{_configuration["BaseUrl"]}".TrimEnd('/');
+
+                return new ParkingLotResponseDto
+                {
+                    Id = parkingLot.Id,
+                    Place_id = parkingLot.Place_id,
+                    Reference = parkingLot.Reference,
+                    Name = parkingLot.Name,
+                    Formatted_address = parkingLot.Address,
+                    Geometry = new Geometry
+                    {
+                        Location = new Location
+                        {
+                            Lat = parkingLot.Latitude,
+                            Lng = parkingLot.Longitude
+                        }
+                    },
+                    Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
+                    Rating = parkingLot.Rating,
+                    Opening_hours = BuildOpeningHours(parkingLot),
+                    Photos = parkingLot.Images?
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.CreatedAt)
+                        .Select(img => new Photo
+                        {
+                            Photo_reference = $"{baseUrl}{img.ImageUrl}",
+                            IsMain = img.IsMain,
+                            CreatedAt = img.CreatedAt
+                        })
+                        .ToList() ?? new List<Photo>(),
+                    Formatted_phone_number = parkingLot.ContactNumber,
+                    Total_spaces = parkingLot.TotalSpaces,
+                    Available_spaces = parkingLot.AvailableSpaces,
+                    Price_per_hour = parkingLot.PricePerHour,
+                    Description = parkingLot.Description,
+                    IsOpen24Hours = parkingLot.IsOpen24Hours,
+                    CreatedAt = parkingLot.CreatedAt,
+                    UpdatedAt = parkingLot.UpdatedAt
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi lấy thông tin bãi đỗ xe {Id}: {Message}", id, ex.Message);
+                throw;
+            }
         }
 
         public async Task<ParkingLotResponseDto> CreateParkingLot(CreateParkingLotDto dto)
@@ -484,53 +530,47 @@ namespace ParkingLotAPI.Services
             }
         }
 
-        private ParkingLotResponseDto MapToResponseDto(ParkingLot parkingLot)
-        {
-            return new ParkingLotResponseDto
-            {
-                Id = parkingLot.Id,
-                Place_id = parkingLot.Place_id,
-                Reference = parkingLot.Reference,
-                Name = parkingLot.Name,
-                Formatted_address = parkingLot.Address,
-                Geometry = new Geometry
-                {
-                    Location = new Location
-                    {
-                        Lat = parkingLot.Latitude,
-                        Lng = parkingLot.Longitude
-                    }
-                },
-                Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
-                Rating = parkingLot.Rating,
-                Opening_hours = BuildOpeningHours(parkingLot),
-                Photos = parkingLot.Images?.Select(img => new Photo
-                {
-                    Photo_reference = img.ImageUrl,
-                    IsMain = img.IsMain,
-                    CreatedAt = img.CreatedAt
-                }).ToList(),
-                Formatted_phone_number = parkingLot.ContactNumber,
-                Total_spaces = parkingLot.TotalSpaces,
-                Available_spaces = parkingLot.AvailableSpaces,
-                Price_per_hour = parkingLot.PricePerHour,
-                Description = parkingLot.Description
-            };
-        }
-
         private OpeningHours BuildOpeningHours(ParkingLot parkingLot)
         {
-            string formatTime(TimeSpan? time) => 
-                parkingLot.IsOpen24Hours ? "24/7" : 
-                time?.ToString(@"HH\:mm") ?? "Chưa cập nhật";
+            string FormatTime(TimeSpan? time)
+            {
+                if (parkingLot.IsOpen24Hours)
+                    return "24/7";
+
+                if (!time.HasValue)
+                    return "Chưa cập nhật";
+
+                try
+                {
+                    // Format với invariant culture để tránh lỗi locale
+                    return time.Value.ToString(@"hh\:mm", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    _logger.LogWarning("Không thể format thời gian {Time} cho parking lot {Id}", 
+                        time, parkingLot.Id);
+                    return "Chưa cập nhật";
+                }
+            }
+
+            bool isOpen;
+            try
+            {
+                isOpen = IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime, parkingLot.IsOpen24Hours);
+            }
+            catch
+            {
+                _logger.LogWarning("Lỗi khi kiểm tra trạng thái mở cửa cho parking lot {Id}", parkingLot.Id);
+                isOpen = false;
+            }
 
             return new OpeningHours
             {
-                Open_now = IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime, parkingLot.IsOpen24Hours),
+                Open_now = isOpen,
                 Operating_hours = new OperatingTime
                 {
-                    Open = formatTime(parkingLot.OpeningTime),
-                    Close = formatTime(parkingLot.ClosingTime),
+                    Open = FormatTime(parkingLot.OpeningTime),
+                    Close = FormatTime(parkingLot.ClosingTime),
                     Is24Hours = parkingLot.IsOpen24Hours
                 }
             };
@@ -543,16 +583,25 @@ namespace ParkingLotAPI.Services
 
             if (!openingTime.HasValue || !closingTime.HasValue)
                 return false;
-            
-            var now = DateTime.Now.TimeOfDay;
-            
-            // Xử lý trường hợp qua ngày
-            if (closingTime.Value < openingTime.Value)
-            {
-                return now >= openingTime.Value || now <= closingTime.Value;
-            }
 
-            return now >= openingTime.Value && now <= closingTime.Value;
+            try
+            {
+                var now = DateTime.Now.TimeOfDay;
+                
+                // Xử lý trường hợp qua ngày
+                if (closingTime.Value < openingTime.Value)
+                {
+                    return now >= openingTime.Value || now <= closingTime.Value;
+                }
+
+                return now >= openingTime.Value && now <= closingTime.Value;
+            }
+            catch
+            {
+                _logger.LogWarning("Lỗi khi so sánh thời gian: opening={Opening}, closing={Closing}", 
+                    openingTime, closingTime);
+                return false;
+            }
         }
     }
 } 
