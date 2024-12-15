@@ -18,5 +18,23 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\parkinglots\c2e412fd-75ba-4196-ba9b-e2f26f1889fe\pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\parkinglots\d46d0f04-ef77-421d-a721-4db6229d2b58\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>ParkingLotAPI</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ParkingLotAPI</BasePath>
+      <RelativePath>uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>ee2agn0o81</Fingerprint>
+      <Integrity>pvaH2FxGARh7dK6hPLUHssLLG/lBmHSVVYwI1swLRPw=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\parkinglots\d46d0f04-ef77-421d-a721-4db6229d2b58\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png'))</OriginalItemSpec>
+    </StaticWebAsset>
   </ItemGroup>
 </Project>
