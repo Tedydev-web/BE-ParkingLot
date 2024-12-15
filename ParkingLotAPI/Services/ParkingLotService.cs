@@ -106,6 +106,7 @@ namespace ParkingLotAPI.Services
                         Lng = parkingLot.Longitude
                     }
                 },
+                Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
                 Rating = parkingLot.Rating,
                 Opening_hours = new OpeningHours
                 {
@@ -131,6 +132,8 @@ namespace ParkingLotAPI.Services
         {
             var parkingLot = new ParkingLot
             {
+                Id = Guid.NewGuid().ToString(),
+                Place_id = dto.Place_id,
                 Reference = dto.Place_id,
                 Name = dto.Name,
                 Address = dto.Formatted_address,
@@ -150,12 +153,11 @@ namespace ParkingLotAPI.Services
                     ? $"Bãi đỗ xe tại {dto.Formatted_address}"
                     : dto.Description,
                 ContactNumber = dto.ContactNumber ?? string.Empty,
+                Types = string.Join(",", dto.Types),
                 Images = new List<ParkingLotImage>()
             };
 
-            parkingLot.Place_id = dto.Place_id;
-
-            // Xử lý upload hình ảnh
+            // Xử lý upload hình ảnh nếu có
             if (dto.Images != null && dto.Images.Any())
             {
                 var uploadPath = Path.Combine(_environment.WebRootPath, "uploads", "parkinglots");
@@ -175,8 +177,9 @@ namespace ParkingLotAPI.Services
 
                         parkingLot.Images.Add(new ParkingLotImage
                         {
+                            Id = Guid.NewGuid().ToString(),
                             ImageUrl = $"/uploads/parkinglots/{fileName}",
-                            IsMain = parkingLot.Images.Count == 0 // Ảnh đầu tiên là ảnh chính
+                            IsMain = parkingLot.Images.Count == 0
                         });
                     }
                 }

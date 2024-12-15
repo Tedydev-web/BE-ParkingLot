@@ -3,7 +3,7 @@ namespace ParkingLotAPI.Models
 {
     public class ParkingLot
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Place_id { get; set; } = string.Empty;
         public string Reference { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
@@ -17,6 +17,7 @@ namespace ParkingLotAPI.Models
         public TimeSpan? ClosingTime { get; set; }
         public bool IsOpen24Hours { get; set; }
         public double Rating { get; set; }
+        public string Types { get; set; } = "parking";
         public ICollection<ParkingLotImage> Images { get; set; } = new List<ParkingLotImage>();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }

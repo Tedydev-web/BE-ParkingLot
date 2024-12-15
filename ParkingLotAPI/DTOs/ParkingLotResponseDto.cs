@@ -1,8 +1,8 @@
 public class ParkingLotResponseDto
 {
-    public string Id { get; set; }
-    public string Place_id { get; set; }
-    public string Reference { get; set; }
+    public string Id { get; set; } = string.Empty;
+    public string Place_id { get; set; } = string.Empty;
+    public string Reference { get; set; } = string.Empty;
     public string Name { get; set; }
     public string Formatted_address { get; set; }
     public Geometry Geometry { get; set; }
