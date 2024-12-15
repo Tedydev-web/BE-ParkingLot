@@ -147,9 +147,9 @@ namespace ParkingLotAPI.Services
                     ParseTimeString(dto.ClosingTime),
                 IsOpen24Hours = dto.IsOpen24Hours,
                 Description = string.IsNullOrEmpty(dto.Description)
-                    ? $"Bãi đỗ xe tại {dto.Compound.District}, {dto.Compound.Province}"
+                    ? $"Bãi đỗ xe tại {dto.Formatted_address}"
                     : dto.Description,
-                ContactNumber = dto.ContactNumber,
+                ContactNumber = dto.ContactNumber ?? string.Empty,
                 Images = new List<ParkingLotImage>()
             };
 
@@ -293,13 +293,17 @@ namespace ParkingLotAPI.Services
             parkingLot.TotalSpaces = updateDto.TotalSpaces;
             parkingLot.AvailableSpaces = updateDto.AvailableSpaces;
             parkingLot.PricePerHour = updateDto.PricePerHour;
-            parkingLot.OpeningTime = updateDto.OpeningTime;
-            parkingLot.ClosingTime = updateDto.ClosingTime;
+            parkingLot.OpeningTime = updateDto.IsOpen24Hours ? 
+                TimeSpan.FromHours(0) : 
+                ParseTimeString(updateDto.OpeningTime);
+            parkingLot.ClosingTime = updateDto.IsOpen24Hours ? 
+                TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59)) : 
+                ParseTimeString(updateDto.ClosingTime);
             parkingLot.IsOpen24Hours = updateDto.IsOpen24Hours;
             parkingLot.Description = string.IsNullOrEmpty(updateDto.Description)
-                ? $"Bãi đỗ xe tại {updateDto.Compound.District}, {updateDto.Compound.Province}"
+                ? $"Bãi đỗ xe tại {updateDto.Formatted_address}"
                 : updateDto.Description;
-            parkingLot.ContactNumber = updateDto.ContactNumber;
+            parkingLot.ContactNumber = updateDto.ContactNumber ?? string.Empty;
             parkingLot.UpdatedAt = DateTime.UtcNow;
 
             // Xử lý upload hình ảnh mới nếu có

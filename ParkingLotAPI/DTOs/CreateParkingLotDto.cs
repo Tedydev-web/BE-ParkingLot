@@ -7,12 +7,12 @@ namespace ParkingLotAPI.DTOs
     public class CreateParkingLotDto
     {
         // Thông tin từ Goong Map
-        public string Place_id { get; set; }
-        public string Formatted_address { get; set; }
-        public GoongGeometry Geometry { get; set; }
-        public string Name { get; set; }
+        public string Place_id { get; set; } = string.Empty;
+        public string Formatted_address { get; set; } = string.Empty;
+        public GoongGeometry Geometry { get; set; } = new GoongGeometry();
+        public string Name { get; set; } = string.Empty;
         public string? Url { get; set; }
-        public string[] Types { get; set; }
+        public string[] Types { get; set; } = Array.Empty<string>();
 
         // Thông tin bổ sung từ admin
         public int TotalSpaces { get; set; }
