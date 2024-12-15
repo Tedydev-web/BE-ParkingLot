@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "PackagePath": "staticwebassets/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.ParkingLotAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.ParkingLotAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.build.ParkingLotAPI.props",
+      "PackagePath": "build\\ParkingLotAPI.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.ParkingLotAPI.props",
+      "PackagePath": "buildMultiTargeting\\ParkingLotAPI.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.ParkingLotAPI.props",
+      "PackagePath": "buildTransitive\\ParkingLotAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

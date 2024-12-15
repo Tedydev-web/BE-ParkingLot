@@ -28,24 +28,25 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Thêm vào phần đăng ký services
+// Đăng ký services
 builder.Services.AddScoped<IParkingLotService, ParkingLotService>(); 
 builder.Services.AddScoped<IGoongMapService, GoongMapService>();
 
-// Thêm vào phần ConfigureServices
+// Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowClientApp",
-        builder => builder
-            .WithOrigins("http://localhost:3000") // URL của Client
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-    );
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 });
 
 builder.Services.AddHttpClient();
 
-// Thêm cấu hình Goong API
+// Cấu hình Goong API
 builder.Services.Configure<GoongApiOptions>(
     builder.Configuration.GetSection("GoongApi")
 );
@@ -60,19 +61,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
-// Add CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
-
 var app = builder.Build();
+
+// Tạo thư mục wwwroot nếu chưa tồn tại
+var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(webRootPath))
+{
+    Directory.CreateDirectory(webRootPath);
+}
+
+// Tạo thư mục uploads trong wwwroot
+var uploadPath = Path.Combine(webRootPath, "uploads", "parkinglots");
+if (!Directory.Exists(uploadPath))
+{
+    Directory.CreateDirectory(uploadPath);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -83,6 +86,17 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Parking Lot API V1");
     });
 }
+
+// Enable serving static files
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append("Cache-Control", "no-cache, no-store");
+        ctx.Context.Response.Headers.Append("Pragma", "no-cache");
+        ctx.Context.Response.Headers.Append("Expires", "-1");
+    }
+});
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");

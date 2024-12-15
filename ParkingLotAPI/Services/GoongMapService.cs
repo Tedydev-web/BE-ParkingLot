@@ -25,7 +25,7 @@ namespace ParkingLotAPI.Services
             _logger = logger;
         }
 
-        public async Task<CreateParkingLotDto> GetParkingLotInfo(double lat, double lng)
+        public async Task<CreateParkingLotDto> GetPlaceDetails(double lat, double lng)
         {
             try
             {
@@ -59,12 +59,7 @@ namespace ParkingLotAPI.Services
                         }
                     },
                     Name = firstResult.GetProperty("name").GetString() ?? string.Empty,
-                    Description = $"Bãi đỗ xe tại {firstResult.GetProperty("formatted_address").GetString()}",
-                    Types = firstResult.GetProperty("types")
-                        .EnumerateArray()
-                        .Select(t => t.GetString())
-                        .Where(t => t != null)
-                        .ToArray()
+                    Description = $"Bãi đỗ xe tại {firstResult.GetProperty("formatted_address").GetString()}"
                 };
             }
             catch (Exception ex)

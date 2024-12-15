@@ -23,6 +23,10 @@ namespace ParkingLotAPI.Data
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.Address).IsRequired();
                 entity.Property(e => e.PricePerHour).HasColumnType("decimal(18,2)");
+                
+                entity.Property(e => e.Types)
+                    .IsRequired()
+                    .HasDefaultValue("parking");
             });
 
             modelBuilder.Entity<ParkingLotImage>(entity =>

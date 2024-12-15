@@ -36,7 +36,7 @@ namespace ParkingLotAPI.Controllers
         {
             try
             {
-                var parkingLotInfo = await _goongMapService.GetParkingLotInfo(lat, lng);
+                var parkingLotInfo = await _goongMapService.GetPlaceDetails(lat, lng);
                 if (parkingLotInfo == null)
                 {
                     return NotFound(new { message = "Không tìm thấy thông tin địa điểm" });

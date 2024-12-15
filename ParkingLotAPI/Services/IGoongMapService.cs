@@ -5,6 +5,6 @@ namespace ParkingLotAPI.Services
 {
     public interface IGoongMapService
     {
-        Task<CreateParkingLotDto> GetParkingLotInfo(double lat, double lng);
+        Task<CreateParkingLotDto> GetPlaceDetails(double lat, double lng);
     }
 } 

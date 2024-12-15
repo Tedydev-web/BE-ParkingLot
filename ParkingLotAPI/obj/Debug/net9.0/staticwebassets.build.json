@@ -1,12 +1,125 @@
 {
   "Version": 1,
-  "Hash": "YQCiX/y+ImOLmNITZQwPrz7gyiekZGyWk0MgJP4kzO0=",
+  "Hash": "cPfx4EcVdrTXVEgfxtqbqEqp9N0ZEIbIfOpVGdkjEAs=",
   "Source": "ParkingLotAPI",
   "BasePath": "_content/ParkingLotAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "ParkingLotAPI/wwwroot",
+      "Source": "ParkingLotAPI",
+      "ContentRoot": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/",
+      "BasePath": "_content/ParkingLotAPI",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "SourceId": "ParkingLotAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/",
+      "BasePath": "_content/ParkingLotAPI",
+      "RelativePath": "uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "1rc5jbspvr",
+      "Integrity": "MzGb1z5kvXv32LSjQULASwpU3oYbseaq1EhFUrt4r88=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.1rc5jbspvr.png",
+      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "133694"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MzGb1z5kvXv32LSjQULASwpU3oYbseaq1EhFUrt4r88=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 10:22:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "1rc5jbspvr"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-MzGb1z5kvXv32LSjQULASwpU3oYbseaq1EhFUrt4r88="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "133694"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MzGb1z5kvXv32LSjQULASwpU3oYbseaq1EhFUrt4r88=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 10:22:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-MzGb1z5kvXv32LSjQULASwpU3oYbseaq1EhFUrt4r88="
+        }
+      ]
+    }
+  ]
 }

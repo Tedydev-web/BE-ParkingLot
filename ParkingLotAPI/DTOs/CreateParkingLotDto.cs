@@ -12,12 +12,11 @@ namespace ParkingLotAPI.DTOs
         public GoongGeometry Geometry { get; set; } = new GoongGeometry();
         public string Name { get; set; } = string.Empty;
         public string? Url { get; set; }
-        public string[] Types { get; set; } = Array.Empty<string>();
 
         // Thông tin bổ sung từ admin
-        public int TotalSpaces { get; set; }
-        public int AvailableSpaces { get; set; }
-        public decimal PricePerHour { get; set; }
+        public int? TotalSpaces { get; set; }
+        public int? AvailableSpaces { get; set; }
+        public decimal? PricePerHour { get; set; }
         public string? OpeningTime { get; set; }
         public string? ClosingTime { get; set; }
         public bool IsOpen24Hours { get; set; }

@@ -16,15 +16,18 @@ namespace ParkingLotAPI.Services
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _environment;
+        private readonly ILogger<ParkingLotService> _logger;
 
         public ParkingLotService(
             ApplicationDbContext context,
             IMapper mapper,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            ILogger<ParkingLotService> logger)
         {
             _context = context;
             _mapper = mapper;
             _environment = environment;
+            _logger = logger;
         }
 
         public async Task<SearchResultDto> SearchParkingLots(double latitude, double longitude, int radius)
@@ -67,12 +70,14 @@ namespace ParkingLotAPI.Services
                 },
                 Photos = p.Images?.Select(img => new Photo
                 {
-                    Photo_reference = img.ImageUrl
-                }).ToList() ?? new List<Photo>(),
+                    Photo_reference = img.ImageUrl,
+                    IsMain = img.IsMain,
+                    CreatedAt = img.CreatedAt
+                }).ToList(),
                 Formatted_phone_number = p.ContactNumber,
                 Total_spaces = p.TotalSpaces,
                 Available_spaces = p.AvailableSpaces,
-                Price_per_hour = (double)p.PricePerHour
+                Price_per_hour = p.PricePerHour
             }).ToList();
 
             return new SearchResultDto
@@ -91,41 +96,7 @@ namespace ParkingLotAPI.Services
             if (parkingLot == null)
                 return null;
 
-            return new ParkingLotResponseDto
-            {
-                Id = parkingLot.Id,
-                Place_id = parkingLot.Place_id,
-                Reference = parkingLot.Reference,
-                Name = parkingLot.Name,
-                Formatted_address = parkingLot.Address,
-                Geometry = new Geometry
-                {
-                    Location = new Location
-                    {
-                        Lat = parkingLot.Latitude,
-                        Lng = parkingLot.Longitude
-                    }
-                },
-                Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
-                Rating = parkingLot.Rating,
-                Opening_hours = new OpeningHours
-                {
-                    Open_now = parkingLot.IsOpen24Hours || IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime),
-                    Weekday_text = new[]
-                    {
-                        $"Giờ mở cửa: {(parkingLot.IsOpen24Hours ? "24/7" : $"{parkingLot.OpeningTime} - {parkingLot.ClosingTime}")}"
-                    }
-                },
-                Photos = parkingLot.Images?.Select(img => new Photo
-                {
-                    Photo_reference = img.ImageUrl
-                }).ToList() ?? new List<Photo>(),
-                Formatted_phone_number = parkingLot.ContactNumber,
-                Total_spaces = parkingLot.TotalSpaces,
-                Available_spaces = parkingLot.AvailableSpaces,
-                Price_per_hour = (double)parkingLot.PricePerHour,
-                Description = parkingLot.Description    
-            };
+            return MapToResponseDto(parkingLot);
         }
 
         public async Task<ParkingLotResponseDto> CreateParkingLot(CreateParkingLotDto dto)
@@ -153,40 +124,21 @@ namespace ParkingLotAPI.Services
                     ? $"Bãi đỗ xe tại {dto.Formatted_address}"
                     : dto.Description,
                 ContactNumber = dto.ContactNumber ?? string.Empty,
-                Types = string.Join(",", dto.Types),
+                Types = "parking",
                 Images = new List<ParkingLotImage>()
             };
 
-            // Xử lý upload hình ảnh nếu có
-            if (dto.Images != null && dto.Images.Any())
-            {
-                var uploadPath = Path.Combine(_environment.WebRootPath, "uploads", "parkinglots");
-                Directory.CreateDirectory(uploadPath);
-
-                foreach (var image in dto.Images)
-                {
-                    if (image.Length > 0)
-                    {
-                        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-                        var filePath = Path.Combine(uploadPath, fileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await image.CopyToAsync(stream);
-                        }
-
-                        parkingLot.Images.Add(new ParkingLotImage
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            ImageUrl = $"/uploads/parkinglots/{fileName}",
-                            IsMain = parkingLot.Images.Count == 0
-                        });
-                    }
-                }
-            }
-
+            // Lưu ParkingLot trước để có Id
             _context.ParkingLots.Add(parkingLot);
             await _context.SaveChangesAsync();
+
+            // Xử lý upload ảnh
+            if (dto.Images != null && dto.Images.Any())
+            {
+                var parkingLotImages = await HandleImageUploads(dto.Images.ToList(), parkingLot.Id);
+                parkingLot.Images = parkingLotImages;
+                await _context.SaveChangesAsync();
+            }
 
             return await GetParkingLotById(parkingLot.Id);
         }
@@ -238,40 +190,7 @@ namespace ParkingLotAPI.Services
                 .Include(p => p.Images)
                 .ToListAsync();
 
-            var results = parkingLots.Select(p => new ParkingLotResponseDto
-            {
-                Id = p.Id,
-                Place_id = p.Place_id,
-                Reference = p.Reference,
-                Name = p.Name,
-                Formatted_address = p.Address,
-                Geometry = new Geometry
-                {
-                    Location = new Location
-                    {
-                        Lat = p.Latitude,
-                        Lng = p.Longitude
-                    }
-                },
-                Rating = p.Rating,
-                Opening_hours = new OpeningHours
-                {
-                    Open_now = p.IsOpen24Hours || IsOpenNow(p.OpeningTime, p.ClosingTime),
-                    Weekday_text = new[]
-                    {
-                        $"Giờ mở cửa: {(p.IsOpen24Hours ? "24/7" : $"{p.OpeningTime} - {p.ClosingTime}")}"
-                    }
-                },
-                Photos = p.Images?.Select(img => new Photo
-                {
-                    Photo_reference = img.ImageUrl
-                }).ToList() ?? new List<Photo>(),
-                Formatted_phone_number = p.ContactNumber,
-                Total_spaces = p.TotalSpaces,
-                Available_spaces = p.AvailableSpaces,
-                Price_per_hour = (double)p.PricePerHour,
-                Description = p.Description
-            }).ToList();
+            var results = parkingLots.Select(MapToResponseDto).ToList();
 
             return new SearchResultDto
             {
@@ -289,6 +208,7 @@ namespace ParkingLotAPI.Services
             if (parkingLot == null)
                 throw new KeyNotFoundException("Không tìm thấy bãi đỗ xe");
 
+            // Cập nhật thông tin cơ bản
             parkingLot.Name = updateDto.Name;
             parkingLot.Address = updateDto.Formatted_address;
             parkingLot.Latitude = updateDto.Geometry.Location.Lat;
@@ -307,32 +227,16 @@ namespace ParkingLotAPI.Services
                 ? $"Bãi đỗ xe tại {updateDto.Formatted_address}"
                 : updateDto.Description;
             parkingLot.ContactNumber = updateDto.ContactNumber ?? string.Empty;
+            parkingLot.Types = "parking";
             parkingLot.UpdatedAt = DateTime.UtcNow;
 
-            // Xử lý upload hình ảnh mới nếu có
+            // Xử lý upload ảnh mới
             if (updateDto.Images != null && updateDto.Images.Any())
             {
-                var uploadPath = Path.Combine(_environment.WebRootPath, "uploads", "parkinglots");
-                Directory.CreateDirectory(uploadPath);
-
-                foreach (var image in updateDto.Images)
+                var newImages = await HandleImageUploads(updateDto.Images.ToList(), parkingLot.Id);
+                foreach (var image in newImages)
                 {
-                    if (image.Length > 0)
-                    {
-                        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-                        var filePath = Path.Combine(uploadPath, fileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await image.CopyToAsync(stream);
-                        }
-
-                        parkingLot.Images.Add(new ParkingLotImage
-                        {
-                            ImageUrl = $"/uploads/parkinglots/{fileName}",
-                            IsMain = parkingLot.Images.Count == 0
-                        });
-                    }
+                    parkingLot.Images.Add(image);
                 }
             }
 
@@ -429,12 +333,14 @@ namespace ParkingLotAPI.Services
                 },
                 Photos = p.Images?.Select(img => new Photo
                 {
-                    Photo_reference = img.ImageUrl
-                }).ToList() ?? new List<Photo>(),
+                    Photo_reference = img.ImageUrl,
+                    IsMain = img.IsMain,
+                    CreatedAt = img.CreatedAt
+                }).ToList(),
                 Formatted_phone_number = p.ContactNumber,
                 Total_spaces = p.TotalSpaces,
                 Available_spaces = p.AvailableSpaces,
-                Price_per_hour = (double)p.PricePerHour
+                Price_per_hour = p.PricePerHour
             }).ToList();
 
             return new SearchResultDto
@@ -455,6 +361,118 @@ namespace ParkingLotAPI.Services
                 return null;
 
             return TimeSpan.TryParse(timeString, out TimeSpan time) ? time : null;
+        }
+
+        private async Task<List<ParkingLotImage>> HandleImageUploads(List<IFormFile> images, string parkingLotId)
+        {
+            var parkingLotImages = new List<ParkingLotImage>();
+            if (images == null || !images.Any()) return parkingLotImages;
+
+            try
+            {
+                var parkingLot = await _context.ParkingLots.FindAsync(parkingLotId);
+                if (parkingLot == null) throw new Exception("Không tìm thấy thông tin bãi đỗ xe");
+
+                // Tạo thư mục cho từng parking lot
+                var parkingLotFolder = Path.Combine(_environment.WebRootPath, "uploads", "parkinglots", parkingLotId);
+                Directory.CreateDirectory(parkingLotFolder);
+
+                // Đếm số ảnh hiện có
+                var existingImagesCount = await _context.ParkingLotImages
+                    .Where(i => i.ParkingLotId == parkingLotId)
+                    .CountAsync();
+
+                foreach (var image in images)
+                {
+                    if (image.Length > 0)
+                    {
+                        var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
+                        if (!new[] { ".jpg", ".jpeg", ".png", ".gif" }.Contains(extension))
+                            continue;
+
+                        // Format tên file: pl_[id]_[tên]_[main/sub_n]_[timestamp].[ext]
+                        var sanitizedName = parkingLot.Name.ToLower()
+                            .Replace(" ", "-")
+                            .Replace("đ", "d")
+                            .Replace("ă", "a")
+                            .Replace("â", "a")
+                            .Replace("ê", "e")
+                            .Replace("ô", "o")
+                            .Replace("ơ", "o")
+                            .Replace("ư", "u");
+
+                        var timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+                        var imageType = existingImagesCount == 0 ? "main" : $"sub_{existingImagesCount + 1}";
+                        var fileName = $"pl_{parkingLotId}_{sanitizedName}_{imageType}_{timestamp}{extension}";
+
+                        var filePath = Path.Combine(parkingLotFolder, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+
+                        parkingLotImages.Add(new ParkingLotImage
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            ParkingLotId = parkingLotId,
+                            ImageUrl = $"/uploads/parkinglots/{parkingLotId}/{fileName}",
+                            IsMain = existingImagesCount == 0,
+                            CreatedAt = DateTime.UtcNow
+                        });
+
+                        existingImagesCount++;
+                    }
+                }
+
+                return parkingLotImages;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi upload ảnh cho parking lot {ParkingLotId}", parkingLotId);
+                throw;
+            }
+        }
+
+        private ParkingLotResponseDto MapToResponseDto(ParkingLot parkingLot)
+        {
+            return new ParkingLotResponseDto
+            {
+                Id = parkingLot.Id,
+                Place_id = parkingLot.Place_id,
+                Reference = parkingLot.Reference,
+                Name = parkingLot.Name,
+                Formatted_address = parkingLot.Address,
+                Geometry = new Geometry
+                {
+                    Location = new Location
+                    {
+                        Lat = parkingLot.Latitude,
+                        Lng = parkingLot.Longitude
+                    }
+                },
+                Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
+                Rating = parkingLot.Rating,
+                Opening_hours = new OpeningHours
+                {
+                    Open_now = parkingLot.IsOpen24Hours || IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime),
+                    Weekday_text = new[]
+                    {
+                        $"Giờ mở cửa: {(parkingLot.IsOpen24Hours ? "24/7" : $"{parkingLot.OpeningTime} - {parkingLot.ClosingTime}")}"
+                    }
+                },
+                Photos = parkingLot.Images?.Select(img => new Photo
+                {
+                    Photo_reference = img.ImageUrl,
+                    IsMain = img.IsMain,
+                    CreatedAt = img.CreatedAt
+                }).ToList(),
+                Formatted_phone_number = parkingLot.ContactNumber,
+                Total_spaces = parkingLot.TotalSpaces,
+                Available_spaces = parkingLot.AvailableSpaces,
+                Price_per_hour = parkingLot.PricePerHour,
+                Description = parkingLot.Description
+            };
         }
     }
 } 
