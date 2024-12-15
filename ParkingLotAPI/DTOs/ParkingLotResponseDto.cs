@@ -18,6 +18,7 @@ public class ParkingLotResponseDto
     public bool IsOpen24Hours { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public double Distance { get; set; }
 }
 
 public class Geometry
