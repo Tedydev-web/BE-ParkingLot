@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "rLOStKtfhrLd4sNwqMiFzndsr2dvgmbEKhH0jdL8z3s=",
+  "Hash": "En5OT5tcBhs6iUfHNjJAR9GfxUf1kwq3HIXH+CezsCo=",
   "Source": "ParkingLotAPI",
   "BasePath": "_content/ParkingLotAPI",
   "Mode": "Default",
@@ -8,19 +8,19 @@
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [
     {
-      "Name": "ParkingLotAPI/wwwroot",
+      "Name": "ParkingLotAPI\\wwwroot",
       "Source": "ParkingLotAPI",
-      "ContentRoot": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/",
+      "ContentRoot": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\",
       "BasePath": "_content/ParkingLotAPI",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
+      "Identity": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9\\pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
       "SourceId": "ParkingLotAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/",
+      "ContentRoot": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\",
       "BasePath": "_content/ParkingLotAPI",
       "RelativePath": "uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -35,13 +35,13 @@
       "Integrity": "hpNytkFBvJM1VyEm/2BCR1PRJ8CJ+nXMD8NnHgFDZgs=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png"
+      "OriginalItemSpec": "wwwroot\\uploads\\parkinglots\\8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9\\pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png"
     },
     {
-      "Identity": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "Identity": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\c2e412fd-75ba-4196-ba9b-e2f26f1889fe\\pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
       "SourceId": "ParkingLotAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/",
+      "ContentRoot": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\",
       "BasePath": "_content/ParkingLotAPI",
       "RelativePath": "uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -56,13 +56,13 @@
       "Integrity": "MzGb1z5kvXv32LSjQULASwpU3oYbseaq1EhFUrt4r88=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
+      "OriginalItemSpec": "wwwroot\\uploads\\parkinglots\\c2e412fd-75ba-4196-ba9b-e2f26f1889fe\\pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
     },
     {
-      "Identity": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
+      "Identity": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\d46d0f04-ef77-421d-a721-4db6229d2b58\\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
       "SourceId": "ParkingLotAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/",
+      "ContentRoot": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\",
       "BasePath": "_content/ParkingLotAPI",
       "RelativePath": "uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -77,13 +77,13 @@
       "Integrity": "pvaH2FxGARh7dK6hPLUHssLLG/lBmHSVVYwI1swLRPw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png"
+      "OriginalItemSpec": "wwwroot\\uploads\\parkinglots\\d46d0f04-ef77-421d-a721-4db6229d2b58\\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png"
     }
   ],
   "Endpoints": [
     {
       "Route": "uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.i5ot0dmjxa.png",
-      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
+      "AssetFile": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9\\pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -104,7 +104,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 10:40:07 GMT"
+          "Value": "Sun, 15 Dec 2024 11:03:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -128,7 +128,7 @@
     },
     {
       "Route": "uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
-      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
+      "AssetFile": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9\\pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -149,7 +149,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 10:40:07 GMT"
+          "Value": "Sun, 15 Dec 2024 11:03:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -165,7 +165,7 @@
     },
     {
       "Route": "uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.1rc5jbspvr.png",
-      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "AssetFile": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\c2e412fd-75ba-4196-ba9b-e2f26f1889fe\\pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -186,7 +186,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 10:40:07 GMT"
+          "Value": "Sun, 15 Dec 2024 10:37:40 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -210,7 +210,7 @@
     },
     {
       "Route": "uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
-      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "AssetFile": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\c2e412fd-75ba-4196-ba9b-e2f26f1889fe\\pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -231,7 +231,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 10:40:07 GMT"
+          "Value": "Sun, 15 Dec 2024 10:37:40 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -247,7 +247,7 @@
     },
     {
       "Route": "uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.ee2agn0o81.png",
-      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
+      "AssetFile": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\d46d0f04-ef77-421d-a721-4db6229d2b58\\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -268,7 +268,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 10:40:07 GMT"
+          "Value": "Sun, 15 Dec 2024 10:37:40 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -292,7 +292,7 @@
     },
     {
       "Route": "uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
-      "AssetFile": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
+      "AssetFile": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\d46d0f04-ef77-421d-a721-4db6229d2b58\\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -313,7 +313,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 10:40:07 GMT"
+          "Value": "Sun, 15 Dec 2024 10:37:40 GMT"
         },
         {
           "Name": "Cache-Control",
