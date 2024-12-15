@@ -11,6 +11,8 @@ namespace ParkingLotAPI.Mappings
             CreateMap<ParkingLot, ParkingLotResponseDto>()
                 .ForMember(dest => dest.Place_id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Formatted_address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.Types, opt => opt.MapFrom(src => 
+                    src.Types == null ? new[] { "parking" } : src.Types.Split(',', StringSplitOptions.RemoveEmptyEntries)))
                 .ForMember(dest => dest.Geometry, opt => opt.MapFrom(src => new Geometry
                 {
                     Location = new Location
@@ -20,14 +22,14 @@ namespace ParkingLotAPI.Mappings
                     }
                 }))
                 .ForMember(dest => dest.Opening_hours, opt => opt.MapFrom(src => BuildOpeningHours(src)))
-                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Images != null 
-                    ? src.Images.Select(img => new Photo
+                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => 
+                    src.Images == null ? new List<Photo>() : 
+                    src.Images.Select(img => new Photo
                     {
                         Photo_reference = img.ImageUrl,
                         IsMain = img.IsMain,
                         CreatedAt = img.CreatedAt
-                    })
-                    : new List<Photo>()))
+                    })))
                 .ForMember(dest => dest.Formatted_phone_number, opt => opt.MapFrom(src => src.ContactNumber));
         }
 

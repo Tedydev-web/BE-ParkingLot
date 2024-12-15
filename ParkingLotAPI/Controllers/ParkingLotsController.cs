@@ -212,15 +212,13 @@ namespace ParkingLotAPI.Controllers
         }
 
         [HttpGet("nearby")]
-        public async Task<ActionResult<SearchResultDto>> GetNearby(
+        public async Task<ActionResult<object>> GetNearby(
             [FromQuery] string location,
             [FromQuery] int radius = 3000,
-            [FromQuery] int limit = 10,
-            [FromQuery] bool has_children = false)
+            [FromQuery] int limit = 10)
         {
             try
             {
-                // Parse location string to lat,lng
                 var coordinates = location.Split(',');
                 if (coordinates.Length != 2 || 
                     !double.TryParse(coordinates[0], out double latitude) ||
@@ -229,30 +227,61 @@ namespace ParkingLotAPI.Controllers
                     return BadRequest(new { message = "Invalid location format. Expected format: latitude,longitude" });
                 }
 
-                // Validate radius
-                if (radius < 1000 || radius > 20000)
+                var result = await _parkingLotService.SearchNearbyParkingLots(latitude, longitude, radius, limit);
+
+                // Transform to match Goong API format
+                return Ok(new NearbyParkingLotResponse
                 {
-                    radius = 3000; // Default to 3km if invalid
-                }
+                    Status = result.Status,
+                    Message = result.Message,
+                    Predictions = result.Results.Select(p => new ParkingLotPrediction
+                    {
+                        // Fields từ Goong API
+                        Description = $"{p.Name}, {p.Formatted_address}",
+                        Matched_substrings = new List<MatchedSubstring>
+                        {
+                            new MatchedSubstring { Length = p.Name.Length, Offset = 0 }
+                        },
+                        Place_id = p.Place_id,
+                        Reference = p.Reference,
+                        Structured_formatting = new StructuredFormatting
+                        {
+                            Main_text = p.Name,
+                            Secondary_text = p.Formatted_address,
+                            Main_text_matched_substrings = new List<MatchedSubstring>(),
+                            Secondary_text_matched_substrings = new List<MatchedSubstring>()
+                        },
+                        Has_children = p.Has_children,
+                        Plus_code = p.Plus_code,
+                        Compound = new GoongCompound
+                        {
+                            District = p.Compound?.District ?? string.Empty,
+                            Commune = p.Compound?.Commune ?? string.Empty,
+                            Province = p.Compound?.Province ?? string.Empty
+                        },
+                        Terms = p.Terms?.Select(t => new Term { Value = t }).ToList() ?? new List<Term>(),
+                        Types = new[] { "parking" },
 
-                var result = await _parkingLotService.SearchNearbyParkingLots(
-                    latitude, 
-                    longitude, 
-                    radius,
-                    limit
-                );
-
-                return Ok(result);
+                        // Fields từ ParkingLot hiện tại
+                        Name = p.Name,
+                        Formatted_address = p.Formatted_address,
+                        Geometry = p.Geometry,
+                        Rating = p.Rating,
+                        Opening_hours = p.Opening_hours,
+                        Photos = p.Photos,
+                        Formatted_phone_number = p.Formatted_phone_number,
+                        Total_spaces = p.Total_spaces,
+                        Available_spaces = p.Available_spaces,
+                        Price_per_hour = p.Price_per_hour,
+                        IsOpen24Hours = p.IsOpen24Hours,
+                        Distance_meters = (int)p.Distance
+                    }).ToList()
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Lỗi khi tìm kiếm bãi đỗ xe gần đây");
-                return BadRequest(new SearchResultDto 
-                { 
-                    Status = "ERROR",
-                    Message = "Có lỗi xảy ra khi tìm kiếm bãi đỗ xe gần đây",
-                    Results = new List<ParkingLotResponseDto>()
-                });
+                return BadRequest(new { message = "Có lỗi xảy ra khi tìm kiếm bãi đỗ xe gần đây" });
             }
         }
     }

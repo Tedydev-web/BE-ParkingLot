@@ -19,6 +19,10 @@ public class ParkingLotResponseDto
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public double Distance { get; set; }
+    public Compound Compound { get; set; } = new();
+    public ParkingLotAPI.DTOs.PlusCode Plus_code { get; set; } = new();
+    public string[] Terms { get; set; } = Array.Empty<string>();
+    public bool Has_children { get; set; }
 }
 
 public class Geometry
@@ -35,10 +39,7 @@ public class Location
 public class OpeningHours
 {
     public bool Open_now { get; set; }
-<<<<<<< HEAD
-=======
     public string[] Weekday_text { get; set; } = Array.Empty<string>();
->>>>>>> hotfix-api-SEARCH-ParkingLot
     public OperatingTime Operating_hours { get; set; } = new();
 }
 
@@ -65,4 +66,11 @@ public class Photo
     public string Photo_reference { get; set; } = string.Empty;
     public bool IsMain { get; set; }
     public DateTime CreatedAt { get; set; }
+}
+
+public class Compound
+{
+    public string District { get; set; } = string.Empty;
+    public string Commune { get; set; } = string.Empty;
+    public string Province { get; set; } = string.Empty;
 } 

@@ -3,6 +3,88 @@
   "ManifestType": "Build",
   "Endpoints": [
     {
+      "Route": "uploads/parkinglots/417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d/pl_417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d_bãi-dậu-xe-3232_main_20241215_133435.jpg",
+      "AssetFile": "uploads/parkinglots/417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d/pl_417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d_bãi-dậu-xe-3232_main_20241215_133435.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "329250"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"H6io81bnhZ7X0ggoCEYaUsmMkh5bBJ+Rf3h1GjZJDWU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-H6io81bnhZ7X0ggoCEYaUsmMkh5bBJ+Rf3h1GjZJDWU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/parkinglots/417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d/pl_417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d_bãi-dậu-xe-3232_main_20241215_133435.t1q4nxeysp.jpg",
+      "AssetFile": "uploads/parkinglots/417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d/pl_417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d_bãi-dậu-xe-3232_main_20241215_133435.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "329250"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"H6io81bnhZ7X0ggoCEYaUsmMkh5bBJ+Rf3h1GjZJDWU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "t1q4nxeysp"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-H6io81bnhZ7X0ggoCEYaUsmMkh5bBJ+Rf3h1GjZJDWU="
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/parkinglots/417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d/pl_417bcf55-cb22-41b9-9d69-f8b5cf6d0d7d_bãi-dậu-xe-3232_main_20241215_133435.jpg"
+        }
+      ]
+    },
+    {
       "Route": "uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.i5ot0dmjxa.png",
       "AssetFile": "uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
       "Selectors": [],
@@ -29,7 +111,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
@@ -74,7 +156,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
@@ -111,7 +193,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
@@ -148,7 +230,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
@@ -193,7 +275,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
@@ -238,7 +320,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
@@ -275,7 +357,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
@@ -320,13 +402,95 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 15 Dec 2024 13:30:33 GMT"
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
           "Value": "sha256-pvaH2FxGARh7dK6hPLUHssLLG/lBmHSVVYwI1swLRPw="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/parkinglots/df6fb1ab-719d-4d36-a429-7793e954fb05/pl_df6fb1ab-719d-4d36-a429-7793e954fb05_bãi-dậu-xe-lasted_main_20241215_134234.4a6xeemuxq.png",
+      "AssetFile": "uploads/parkinglots/df6fb1ab-719d-4d36-a429-7793e954fb05/pl_df6fb1ab-719d-4d36-a429-7793e954fb05_bãi-dậu-xe-lasted_main_20241215_134234.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2026417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Ls82mC6WBHvvD8AhLAFFngPy4aH4dpyXGKYxORKsZA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4a6xeemuxq"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Ls82mC6WBHvvD8AhLAFFngPy4aH4dpyXGKYxORKsZA="
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/parkinglots/df6fb1ab-719d-4d36-a429-7793e954fb05/pl_df6fb1ab-719d-4d36-a429-7793e954fb05_bãi-dậu-xe-lasted_main_20241215_134234.png"
+        }
+      ]
+    },
+    {
+      "Route": "uploads/parkinglots/df6fb1ab-719d-4d36-a429-7793e954fb05/pl_df6fb1ab-719d-4d36-a429-7793e954fb05_bãi-dậu-xe-lasted_main_20241215_134234.png",
+      "AssetFile": "uploads/parkinglots/df6fb1ab-719d-4d36-a429-7793e954fb05/pl_df6fb1ab-719d-4d36-a429-7793e954fb05_bãi-dậu-xe-lasted_main_20241215_134234.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2026417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Ls82mC6WBHvvD8AhLAFFngPy4aH4dpyXGKYxORKsZA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 18:03:45 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Ls82mC6WBHvvD8AhLAFFngPy4aH4dpyXGKYxORKsZA="
         }
       ]
     }

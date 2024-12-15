@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using ParkingLotAPI.Data;
 using ParkingLotAPI.DTOs;
 using ParkingLotAPI.Models;
+using ParkingLotAPI.Services;
 
 namespace ParkingLotAPI.Services
 {
@@ -18,46 +19,28 @@ namespace ParkingLotAPI.Services
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<ParkingLotService> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IGoongMapService _goongMapService;
 
         public ParkingLotService(
             ApplicationDbContext context,
             IMapper mapper,
             IWebHostEnvironment environment,
             ILogger<ParkingLotService> logger,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IGoongMapService goongMapService)
         {
             _context = context;
             _mapper = mapper;
             _environment = environment;
             _logger = logger;
             _configuration = configuration;
+            _goongMapService = goongMapService;
         }
 
         public async Task<SearchResultDto> SearchParkingLots(double latitude, double longitude, int radius)
         {
             try 
             {
-<<<<<<< HEAD
-                var parkingLots = await _context.ParkingLots
-                    .Include(p => p.Images)
-                    .Where(p => CalculateDistance(latitude, longitude, p.Latitude, p.Longitude) <= radius)
-                    .ToListAsync();
-
-                if (!parkingLots.Any())
-                {
-                    return new SearchResultDto 
-                    {
-                        Status = "ZERO_RESULTS", 
-                        Results = new List<ParkingLotResponseDto>() 
-                    };
-                }
-
-                var results = parkingLots.Select(p => new ParkingLotResponseDto
-                {
-                    Place_id = p.Id,
-                    Name = p.Name,
-                    Formatted_address = p.Address,
-=======
                 // Lấy danh sách bãi đỗ xe trong bán kính
                 var parkingLots = await _context.ParkingLots
                     .Include(p => p.Images)
@@ -101,29 +84,10 @@ namespace ParkingLotAPI.Services
                     Reference = x.ParkingLot.Reference,
                     Name = x.ParkingLot.Name,
                     Formatted_address = x.ParkingLot.Address,
->>>>>>> hotfix-api-SEARCH-ParkingLot
                     Geometry = new Geometry
                     {
                         Location = new Location
                         {
-<<<<<<< HEAD
-                            Lat = p.Latitude,
-                            Lng = p.Longitude
-                        }
-                    },
-                    Rating = p.Rating,
-                    Opening_hours = BuildOpeningHours(p),
-                    Photos = p.Images?.Select(img => new Photo
-                    {
-                        Photo_reference = img.ImageUrl,
-                        IsMain = img.IsMain,
-                        CreatedAt = img.CreatedAt
-                    }).ToList(),
-                    Formatted_phone_number = p.ContactNumber,
-                    Total_spaces = p.TotalSpaces,
-                    Available_spaces = p.AvailableSpaces,
-                    Price_per_hour = p.PricePerHour
-=======
                             Lat = x.ParkingLot.Latitude,
                             Lng = x.ParkingLot.Longitude
                         }
@@ -157,15 +121,11 @@ namespace ParkingLotAPI.Services
                     CreatedAt = x.ParkingLot.CreatedAt,
                     UpdatedAt = x.ParkingLot.UpdatedAt,
                     Distance = Math.Round(x.Distance, 2)
->>>>>>> hotfix-api-SEARCH-ParkingLot
                 }).ToList();
 
                 return new SearchResultDto
                 {
                     Status = "OK",
-<<<<<<< HEAD
-                    Results = results
-=======
                     Message = $"Tìm thấy {results.Count} bãi đỗ xe trong bán kính {radius}m",
                     Results = results,
                     Metadata = new SearchMetadata
@@ -180,7 +140,6 @@ namespace ParkingLotAPI.Services
                             { "max_distance", results.Max(r => r.Distance) }
                         }
                     }
->>>>>>> hotfix-api-SEARCH-ParkingLot
                 };
             }
             catch (Exception ex)
@@ -371,9 +330,6 @@ namespace ParkingLotAPI.Services
                     },
                     Rating = p.Rating,
                     Types = new[] { "parking" },
-<<<<<<< HEAD
-                    Opening_hours = BuildOpeningHours(p),
-=======
                     Opening_hours = new OpeningHours
                     {
                         Open_now = p.IsOpen24Hours || IsOpenNow(p.OpeningTime, p.ClosingTime, p.IsOpen24Hours),
@@ -382,7 +338,6 @@ namespace ParkingLotAPI.Services
                             $"Giờ mở cửa: {(p.IsOpen24Hours ? "24/7" : $"{p.OpeningTime:hh\\:mm} - {p.ClosingTime:hh\\:mm}")}"
                         }
                     },
->>>>>>> hotfix-api-SEARCH-ParkingLot
                     Photos = p.Images?
                         .OrderByDescending(img => img.IsMain)
                         .ThenBy(img => img.CreatedAt)
@@ -476,7 +431,7 @@ namespace ParkingLotAPI.Services
             if (parkingLot == null)
                 throw new KeyNotFoundException("Không tìm thấy bãi đỗ xe");
 
-            // Xóa các file ��nh
+            // Xóa các file ảnh
             if (parkingLot.Images != null && parkingLot.Images.Any())
             {
                 foreach (var image in parkingLot.Images)
@@ -497,21 +452,20 @@ namespace ParkingLotAPI.Services
         {
             try
             {
-                // Lấy tất cả parking lots từ DB
+                // Lấy danh sách bãi đỗ xe từ DB và tính khoảng cách
                 var parkingLots = await _context.ParkingLots
                     .Include(p => p.Images)
                     .AsNoTracking()
                     .ToListAsync();
 
-                // Tính khoảng cách và lọc theo radius
                 var nearbyParkingLots = parkingLots
                     .Select(p => new
                     {
                         ParkingLot = p,
                         Distance = CalculateDistance(latitude, longitude, p.Latitude, p.Longitude)
                     })
-                    .Where(x => x.Distance <= radius) // Lọc trong phạm vi radius
-                    .OrderBy(x => x.Distance) // Sắp xếp theo khoảng cách gần nhất
+                    .Where(x => x.Distance <= radius)
+                    .OrderBy(x => x.Distance)
                     .Take(limit)
                     .ToList();
 
@@ -535,106 +489,93 @@ namespace ParkingLotAPI.Services
                     };
                 }
 
-                var baseUrl = $"{_configuration["BaseUrl"]}".TrimEnd('/');
+                // Bổ sung thông tin từ Goong Map cho mỗi parking lot
+                var enrichedResults = new List<ParkingLotResponseDto>();
+                var baseUrl = _configuration.GetValue<string>("BaseUrl")?.TrimEnd('/') ?? "http://localhost:8000";
 
-                var results = nearbyParkingLots.Select(x => new ParkingLotResponseDto
+                foreach (var item in nearbyParkingLots)
                 {
-                    Id = x.ParkingLot.Id,
-                    Place_id = x.ParkingLot.Place_id,
-                    Reference = x.ParkingLot.Reference,
-                    Name = x.ParkingLot.Name,
-                    Formatted_address = x.ParkingLot.Address,
-                    Geometry = new Geometry
+                    var geocodingInfo = await _goongMapService.GetGeocodingInfo(
+                        item.ParkingLot.Latitude, 
+                        item.ParkingLot.Longitude
+                    );
+
+                    var enrichedLot = new ParkingLotResponseDto
                     {
-                        Location = new Location
+                        Id = item.ParkingLot.Id,
+                        Place_id = item.ParkingLot.Place_id,
+                        Reference = item.ParkingLot.Reference,
+                        Name = item.ParkingLot.Name,
+                        Formatted_address = geocodingInfo.FormattedAddress,
+                        Geometry = new Geometry
                         {
-                            Lat = x.ParkingLot.Latitude,
-                            Lng = x.ParkingLot.Longitude
-                        }
-                    },
-                    Types = new[] { "parking" },
-                    Rating = x.ParkingLot.Rating,
-                    Opening_hours = BuildOpeningHours(x.ParkingLot),
-                    Photos = x.ParkingLot.Images?
-                        .OrderByDescending(img => img.IsMain)
-                        .ThenBy(img => img.CreatedAt)
-                        .Select(img => new Photo
+                            Location = new Location
+                            {
+                                Lat = item.ParkingLot.Latitude,
+                                Lng = item.ParkingLot.Longitude
+                            }
+                        },
+                        Types = geocodingInfo.Types ?? new[] { "parking" },
+                        Rating = item.ParkingLot.Rating,
+                        Opening_hours = BuildOpeningHours(item.ParkingLot),
+                        Photos = item.ParkingLot.Images?
+                            .OrderByDescending(img => img.IsMain)
+                            .ThenBy(img => img.CreatedAt)
+                            .Select(img => new Photo
+                            {
+                                Photo_reference = $"{baseUrl}{img.ImageUrl}",
+                                IsMain = img.IsMain,
+                                CreatedAt = img.CreatedAt
+                            })
+                            .ToList() ?? new List<Photo>(),
+                        Formatted_phone_number = item.ParkingLot.ContactNumber,
+                        Total_spaces = item.ParkingLot.TotalSpaces,
+                        Available_spaces = item.ParkingLot.AvailableSpaces,
+                        Price_per_hour = item.ParkingLot.PricePerHour,
+                        Description = item.ParkingLot.Description,
+                        Distance = Math.Round(item.Distance, 2),
+                        Compound = new Compound
                         {
-                            Photo_reference = $"{baseUrl}{img.ImageUrl}",
-                            IsMain = img.IsMain,
-                            CreatedAt = img.CreatedAt
-                        })
-                        .ToList() ?? new List<Photo>(),
-                    Formatted_phone_number = x.ParkingLot.ContactNumber,
-                    Total_spaces = x.ParkingLot.TotalSpaces,
-                    Available_spaces = x.ParkingLot.AvailableSpaces,
-                    Price_per_hour = x.ParkingLot.PricePerHour,
-                    Description = x.ParkingLot.Description,
-                    Distance = Math.Round(x.Distance, 2) // Thêm khoảng cách vào response
-                }).ToList();
+                            District = geocodingInfo.District,
+                            Commune = geocodingInfo.Commune,
+                            Province = geocodingInfo.Province
+                        },
+                        Plus_code = new ParkingLotAPI.DTOs.PlusCode
+                        {
+                            CompoundCode = geocodingInfo.PlusCode.CompoundCode,
+                            GlobalCode = geocodingInfo.PlusCode.GlobalCode
+                        },
+                        Terms = geocodingInfo.Terms?.Select(t => t.Value).ToArray() ?? Array.Empty<string>(),
+                        Has_children = geocodingInfo.HasChildren
+                    };
+
+                    enrichedResults.Add(enrichedLot);
+                }
 
                 return new SearchResultDto
                 {
                     Status = "OK",
-                    Message = $"Tìm thấy {results.Count} bãi đỗ xe trong bán kính {radius}m",
-                    Results = results,
+                    Message = $"Tìm thấy {enrichedResults.Count} bãi đỗ xe trong bán kính {radius}m",
+                    Results = enrichedResults,
                     Metadata = new SearchMetadata
                     {
-                        Total = results.Count,
+                        Total = enrichedResults.Count,
                         Limit = limit,
                         Extra = new Dictionary<string, object>
                         {
                             { "radius", radius },
                             { "center", new { latitude, longitude } },
-                            { "min_distance", results.Min(r => r.Distance) },
-                            { "max_distance", results.Max(r => r.Distance) }
+                            { "min_distance", enrichedResults.Min(r => r.Distance) },
+                            { "max_distance", enrichedResults.Max(r => r.Distance) }
                         }
                     }
                 };
             }
             catch (Exception ex)
             {
-<<<<<<< HEAD
-                Place_id = p.Place_id,
-                Name = p.Name,
-                Formatted_address = p.Address,
-                Geometry = new Geometry
-                {
-                    Location = new Location
-                    {
-                        Lat = p.Latitude,
-                        Lng = p.Longitude
-                    }
-                },
-                Rating = p.Rating,
-                Opening_hours = BuildOpeningHours(p),
-                Photos = p.Images?.Select(img => new Photo
-                {
-                    Photo_reference = img.ImageUrl,
-                    IsMain = img.IsMain,
-                    CreatedAt = img.CreatedAt
-                }).ToList(),
-                Formatted_phone_number = p.ContactNumber,
-                Total_spaces = p.TotalSpaces,
-                Available_spaces = p.AvailableSpaces,
-                Price_per_hour = p.PricePerHour
-            }).ToList();
-
-            return new SearchResultDto
-            {
-                Status = "OK",
-                Results = results,
-                Metadata = new SearchMetadata
-                {
-                    Total = results.Count(),
-                    Limit = limit
-                }
-            };
-=======
                 _logger.LogError(ex, "Lỗi khi tìm kiếm bãi đỗ xe gần đây: {Message}", ex.Message);
                 throw;
             }
->>>>>>> hotfix-api-SEARCH-ParkingLot
         }
 
         private TimeSpan? ParseTimeString(string timeString)
@@ -728,93 +669,6 @@ namespace ParkingLotAPI.Services
 
                 try
                 {
-<<<<<<< HEAD
-                    // Format với invariant culture để tránh lỗi locale
-                    return time.Value.ToString(@"hh\:mm", System.Globalization.CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    _logger.LogWarning("Không thể format thời gian {Time} cho parking lot {Id}", 
-                        time, parkingLot.Id);
-                    return "Chưa cập nhật";
-                }
-            }
-
-            bool isOpen;
-            try
-            {
-                isOpen = IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime, parkingLot.IsOpen24Hours);
-            }
-            catch
-            {
-                _logger.LogWarning("Lỗi khi kiểm tra trạng thái mở cửa cho parking lot {Id}", parkingLot.Id);
-                isOpen = false;
-            }
-
-            return new OpeningHours
-            {
-                Open_now = isOpen,
-                Operating_hours = new OperatingTime
-=======
-                    Location = new Location
-                    {
-                        Lat = parkingLot.Latitude,
-                        Lng = parkingLot.Longitude
-                    }
-                },
-                Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
-                Rating = parkingLot.Rating,
-                Opening_hours = BuildOpeningHours(parkingLot),
-                Photos = parkingLot.Images?.Select(img => new Photo
->>>>>>> hotfix-api-SEARCH-ParkingLot
-                {
-                    Open = FormatTime(parkingLot.OpeningTime),
-                    Close = FormatTime(parkingLot.ClosingTime),
-                    Is24Hours = parkingLot.IsOpen24Hours
-                }
-            };
-        }
-
-<<<<<<< HEAD
-        private bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime, bool isOpen24Hours)
-        {
-            if (isOpen24Hours)
-                return true;
-
-            if (!openingTime.HasValue || !closingTime.HasValue)
-                return false;
-
-            try
-            {
-                var now = DateTime.Now.TimeOfDay;
-                
-                // Xử lý trường hợp qua ngày
-                if (closingTime.Value < openingTime.Value)
-                {
-                    return now >= openingTime.Value || now <= closingTime.Value;
-                }
-
-                return now >= openingTime.Value && now <= closingTime.Value;
-            }
-            catch
-            {
-                _logger.LogWarning("Lỗi khi so sánh thời gian: opening={Opening}, closing={Closing}", 
-                    openingTime, closingTime);
-                return false;
-            }
-=======
-        private OpeningHours BuildOpeningHours(ParkingLot parkingLot)
-        {
-            string FormatTime(TimeSpan? time)
-            {
-                if (parkingLot.IsOpen24Hours)
-                    return "24/7";
-
-                if (!time.HasValue)
-                    return "Chưa cập nhật";
-
-                try
-                {
                     // Format với invariant culture để tránh lỗi locale
                     return time.Value.ToString(@"hh\:mm", System.Globalization.CultureInfo.InvariantCulture);
                 }
@@ -847,7 +701,6 @@ namespace ParkingLotAPI.Services
                     Is24Hours = parkingLot.IsOpen24Hours
                 }
             };
->>>>>>> hotfix-api-SEARCH-ParkingLot
         }
     }
 } 
