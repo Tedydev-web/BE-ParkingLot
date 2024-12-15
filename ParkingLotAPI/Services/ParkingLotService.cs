@@ -271,40 +271,49 @@ namespace ParkingLotAPI.Services
             if (parkingLot == null)
                 throw new KeyNotFoundException("Không tìm thấy bãi đỗ xe");
 
-            // Cập nhật thông tin cơ bản
-            parkingLot.Name = updateDto.Name;
-            parkingLot.Address = updateDto.Formatted_address;
-            parkingLot.Latitude = updateDto.Geometry.Location.Lat;
-            parkingLot.Longitude = updateDto.Geometry.Location.Lng;
-            parkingLot.TotalSpaces = updateDto.TotalSpaces;
-            parkingLot.AvailableSpaces = updateDto.AvailableSpaces;
-            parkingLot.PricePerHour = updateDto.PricePerHour;
-            parkingLot.OpeningTime = updateDto.IsOpen24Hours ? 
-                TimeSpan.FromHours(0) : 
-                ParseTimeString(updateDto.OpeningTime);
-            parkingLot.ClosingTime = updateDto.IsOpen24Hours ? 
-                TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59)) : 
-                ParseTimeString(updateDto.ClosingTime);
-            parkingLot.IsOpen24Hours = updateDto.IsOpen24Hours;
-            parkingLot.Description = string.IsNullOrEmpty(updateDto.Description)
-                ? $"Bãi đỗ xe tại {updateDto.Formatted_address}"
-                : updateDto.Description;
-            parkingLot.ContactNumber = updateDto.ContactNumber ?? string.Empty;
-            parkingLot.Types = "parking";
-            parkingLot.UpdatedAt = DateTime.UtcNow;
-
-            // Xử lý upload ảnh mới
-            if (updateDto.Images != null && updateDto.Images.Any())
+            try
             {
-                var newImages = await HandleImageUploads(updateDto.Images.ToList(), parkingLot.Id);
-                foreach (var image in newImages)
-                {
-                    parkingLot.Images.Add(image);
-                }
-            }
+                // Cập nhật thông tin cơ bản
+                parkingLot.Name = updateDto.Name;
+                parkingLot.Address = updateDto.Formatted_address;
+                parkingLot.Latitude = updateDto.Geometry.Location.Lat;
+                parkingLot.Longitude = updateDto.Geometry.Location.Lng;
+                parkingLot.TotalSpaces = updateDto.TotalSpaces;
+                parkingLot.AvailableSpaces = updateDto.AvailableSpaces;
+                parkingLot.PricePerHour = updateDto.PricePerHour;
+                parkingLot.OpeningTime = updateDto.IsOpen24Hours ? 
+                    TimeSpan.FromHours(0) : 
+                    ParseTimeString(updateDto.OpeningTime);
+                parkingLot.ClosingTime = updateDto.IsOpen24Hours ? 
+                    TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59)) : 
+                    ParseTimeString(updateDto.ClosingTime);
+                parkingLot.IsOpen24Hours = updateDto.IsOpen24Hours;
+                parkingLot.Description = string.IsNullOrEmpty(updateDto.Description)
+                    ? $"Bãi đỗ xe tại {updateDto.Formatted_address}"
+                    : updateDto.Description;
+                parkingLot.ContactNumber = updateDto.ContactNumber ?? string.Empty;
+                parkingLot.UpdatedAt = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
-            return await GetParkingLotById(id);
+                // Xử lý upload ảnh mới
+                if (updateDto.Images != null && updateDto.Images.Any())
+                {
+                    var newImages = await HandleImageUploads(updateDto.Images.ToList(), parkingLot.Id);
+                    foreach (var image in newImages)
+                    {
+                        parkingLot.Images.Add(image);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                // Return updated parking lot
+                return await GetParkingLotById(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi cập nhật bãi đỗ xe: {Id}", id);
+                throw;
+            }
         }
 
         public async Task DeleteParkingLot(string id)

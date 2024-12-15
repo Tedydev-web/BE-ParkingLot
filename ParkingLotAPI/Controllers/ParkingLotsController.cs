@@ -197,19 +197,111 @@ namespace ParkingLotAPI.Controllers
         {
             try
             {
-                var parkingLot = await _parkingLotService.GetParkingLotById(id);
-                if (parkingLot == null)
+                // Validate input
+                if (string.IsNullOrEmpty(id))
                 {
-                    return NotFound(new { message = "Không tìm thấy bãi đỗ xe" });
+                    return BadRequest(new 
+                    { 
+                        Status = "ERROR",
+                        Message = "ID không được để trống"
+                    });
                 }
 
+                if (updateDto.Geometry?.Location == null)
+                {
+                    return BadRequest(new 
+                    { 
+                        Status = "ERROR",
+                        Message = "Thiếu thông tin vị trí" 
+                    });
+                }
+
+                // Validate time format
+                if (!updateDto.IsOpen24Hours)
+                {
+                    if (!string.IsNullOrEmpty(updateDto.OpeningTime) && !string.IsNullOrEmpty(updateDto.ClosingTime))
+                    {
+                        if (!TimeSpan.TryParse(updateDto.OpeningTime, out _) || 
+                            !TimeSpan.TryParse(updateDto.ClosingTime, out _))
+                        {
+                            return BadRequest(new 
+                            { 
+                                Status = "ERROR",
+                                Message = "Định dạng thời gian không hợp lệ. Vui lòng sử dụng định dạng HH:mm" 
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    updateDto.OpeningTime = "00:00";
+                    updateDto.ClosingTime = "23:59";
+                }
+
+                // Validate images
+                if (updateDto.Images != null)
+                {
+                    foreach (var image in updateDto.Images)
+                    {
+                        if (image.Length > 5 * 1024 * 1024) // 5MB limit
+                        {
+                            return BadRequest(new 
+                            { 
+                                Status = "ERROR",
+                                Message = "Kích thước ảnh không được vượt quá 5MB" 
+                            });
+                        }
+
+                        var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
+                        if (!new[] { ".jpg", ".jpeg", ".png", ".gif" }.Contains(extension))
+                        {
+                            return BadRequest(new 
+                            { 
+                                Status = "ERROR",
+                                Message = "Chỉ chấp nhận file ảnh định dạng jpg, jpeg, png, gif" 
+                            });
+                        }
+                    }
+                }
+
+                // Check if parking lot exists
+                var existingParkingLot = await _parkingLotService.GetParkingLotById(id);
+                if (existingParkingLot == null)
+                {
+                    return NotFound(new 
+                    { 
+                        Status = "NOT_FOUND",
+                        Message = "Không tìm thấy bãi đỗ xe" 
+                    });
+                }
+
+                // Set default values
+                updateDto.TotalSpaces ??= existingParkingLot.Total_spaces;
+                updateDto.AvailableSpaces ??= existingParkingLot.Available_spaces;
+                updateDto.PricePerHour ??= existingParkingLot.Price_per_hour;
+                updateDto.Description ??= existingParkingLot.Description;
+                updateDto.ContactNumber ??= existingParkingLot.Formatted_phone_number;
+
+                // Update parking lot
                 var result = await _parkingLotService.UpdateParkingLot(id, updateDto);
-                return Ok(result);
+
+                return Ok(new
+                {
+                    Status = "OK",
+                    Message = "Cập nhật bãi đỗ xe thành công",
+                    Result = result
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Lỗi khi cập nhật bãi đỗ xe");
-                return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật bãi đỗ xe" });
+                _logger.LogError(ex, "Lỗi khi cập nhật bãi đỗ xe: {Id}, Error: {Message}", id, ex.Message);
+                return StatusCode(500, new 
+                { 
+                    Status = "ERROR",
+                    Message = "Có lỗi xảy ra khi cập nhật bãi đỗ xe",
+                    Error = ex.Message,
+                    Details = ex.InnerException?.Message
+                });
             }
         }
 
