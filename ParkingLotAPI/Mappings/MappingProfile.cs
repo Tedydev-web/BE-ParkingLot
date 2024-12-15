@@ -19,24 +19,52 @@ namespace ParkingLotAPI.Mappings
                         Lng = src.Longitude
                     }
                 }))
-                .ForMember(dest => dest.Opening_hours, opt => opt.MapFrom(src => new OpeningHours
-                {
-                    Open_now = src.IsOpen24Hours || IsOpenNow(src.OpeningTime, src.ClosingTime),
-                    Weekday_text = new[] { $"Giờ mở cửa: {(src.IsOpen24Hours ? "24/7" : $"{src.OpeningTime} - {src.ClosingTime}")}" }
-                }))
-                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Images.Select(img => new Photo
-                {
-                    Photo_reference = img.ImageUrl
-                })))
+                .ForMember(dest => dest.Opening_hours, opt => opt.MapFrom(src => BuildOpeningHours(src)))
+                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Images != null 
+                    ? src.Images.Select(img => new Photo
+                    {
+                        Photo_reference = img.ImageUrl,
+                        IsMain = img.IsMain,
+                        CreatedAt = img.CreatedAt
+                    })
+                    : new List<Photo>()))
                 .ForMember(dest => dest.Formatted_phone_number, opt => opt.MapFrom(src => src.ContactNumber));
         }
 
-        private bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime)
+        private static OpeningHours BuildOpeningHours(ParkingLot parkingLot)
         {
+            string formatTime(TimeSpan? time) => 
+                parkingLot.IsOpen24Hours ? "24/7" : 
+                time.HasValue ? time.Value.ToString(@"HH\:mm") : "Chưa cập nhật";
+
+            return new OpeningHours
+            {
+                Open_now = IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime, parkingLot.IsOpen24Hours),
+                Operating_hours = new OperatingTime
+                {
+                    Open = formatTime(parkingLot.OpeningTime),
+                    Close = formatTime(parkingLot.ClosingTime),
+                    Is24Hours = parkingLot.IsOpen24Hours
+                }
+            };
+        }
+
+        private static bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime, bool isOpen24Hours)
+        {
+            if (isOpen24Hours)
+                return true;
+
             if (!openingTime.HasValue || !closingTime.HasValue)
                 return false;
             
             var now = DateTime.Now.TimeOfDay;
+            
+            // Xử lý trường hợp qua ngày
+            if (closingTime.Value < openingTime.Value)
+            {
+                return now >= openingTime.Value || now <= closingTime.Value;
+            }
+
             return now >= openingTime.Value && now <= closingTime.Value;
         }
     }

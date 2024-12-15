@@ -45,7 +45,7 @@ namespace ParkingLotAPI.Services
                 if (!parkingLots.Any())
                 {
                     return new SearchResultDto 
-                    { 
+                    {
                         Status = "ZERO_RESULTS", 
                         Results = new List<ParkingLotResponseDto>() 
                     };

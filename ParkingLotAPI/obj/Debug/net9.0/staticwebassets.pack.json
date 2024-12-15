@@ -1,35 +1,39 @@
 {
   "Files": [
     {
-      "Id": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9\\pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
-      "PackagePath": "staticwebassets\\uploads\\parkinglots\\8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9\\pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png"
+      "Id": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
+      "PackagePath": "staticwebassets/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png"
     },
     {
-      "Id": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\c2e412fd-75ba-4196-ba9b-e2f26f1889fe\\pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
-      "PackagePath": "staticwebassets\\uploads\\parkinglots\\c2e412fd-75ba-4196-ba9b-e2f26f1889fe\\pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
+      "Id": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_sub_2_20241215_114726.jpg",
+      "PackagePath": "staticwebassets/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_sub_2_20241215_114726.jpg"
     },
     {
-      "Id": "D:\\Coder\\Github\\BE-ParkingLot\\ParkingLotAPI\\wwwroot\\uploads\\parkinglots\\d46d0f04-ef77-421d-a721-4db6229d2b58\\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
-      "PackagePath": "staticwebassets\\uploads\\parkinglots\\d46d0f04-ef77-421d-a721-4db6229d2b58\\pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png"
+      "Id": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
+      "PackagePath": "staticwebassets/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
     },
     {
-      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.ParkingLotAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "Id": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png",
+      "PackagePath": "staticwebassets/uploads/parkinglots/d46d0f04-ef77-421d-a721-4db6229d2b58/pl_d46d0f04-ef77-421d-a721-4db6229d2b58_diểm-dỗ-xe-04_main_20241215_102739.png"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.ParkingLotAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
-      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.ParkingLotAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.ParkingLotAPI.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
     {
-      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.ParkingLotAPI.props",
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.build.ParkingLotAPI.props",
       "PackagePath": "build\\ParkingLotAPI.props"
     },
     {
-      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.ParkingLotAPI.props",
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.ParkingLotAPI.props",
       "PackagePath": "buildMultiTargeting\\ParkingLotAPI.props"
     },
     {
-      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.ParkingLotAPI.props",
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.ParkingLotAPI.props",
       "PackagePath": "buildTransitive\\ParkingLotAPI.props"
     }
   ],
