@@ -13,15 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ParkingLotAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+631c7e56fa8b414d7f206c1202395e64db706158")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d25678f6d8e191d12cffb8356f8eea7210c4543")]
->>>>>>> hotfix-api-SEARCH-ParkingLot
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f99c89e0d8ffdb20ae1b42d1e41dad5820a9aad7")]
->>>>>>> e747c16 (feat: Implement JWT authentication and user identity management)
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fa70f0c4e31f24757dac8aac38be8d1f8d3366f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ParkingLotAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ParkingLotAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
