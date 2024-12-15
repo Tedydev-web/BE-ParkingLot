@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkingLotAPI.Data;
 
@@ -11,9 +12,11 @@ using ParkingLotAPI.Data;
 namespace ParkingLotAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241215171243_AddIdentityTables")]
+    partial class AddIdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,45 +233,6 @@ namespace ParkingLotAPI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ParkingLotAPI.Models.Auth.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Invalidated")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("JwtId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Used")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
-                });
-
             modelBuilder.Entity("ParkingLotAPI.Models.ParkingLot", b =>
                 {
                     b.Property<string>("Id")
@@ -419,17 +383,6 @@ namespace ParkingLotAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ParkingLotAPI.Models.Auth.RefreshToken", b =>
-                {
-                    b.HasOne("ParkingLotAPI.Models.ApplicationUser", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ParkingLotAPI.Models.ParkingLotImage", b =>
                 {
                     b.HasOne("ParkingLotAPI.Models.ParkingLot", "ParkingLot")
@@ -439,11 +392,6 @@ namespace ParkingLotAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("ParkingLot");
-                });
-
-            modelBuilder.Entity("ParkingLotAPI.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("ParkingLotAPI.Models.ParkingLot", b =>

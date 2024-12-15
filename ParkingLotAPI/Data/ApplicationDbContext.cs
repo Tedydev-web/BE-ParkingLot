@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ParkingLotAPI.Models;
+using ParkingLotAPI.Models.Auth;
 
 namespace ParkingLotAPI.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -12,6 +14,7 @@ namespace ParkingLotAPI.Data
 
         public DbSet<ParkingLot> ParkingLots { get; set; }
         public DbSet<ParkingLotImage> ParkingLotImages { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +39,16 @@ namespace ParkingLotAPI.Data
                       .WithMany(p => p.Images)
                       .HasForeignKey(e => e.ParkingLotId)
                       .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Token).IsRequired();
+                entity.Property(e => e.JwtId).IsRequired();
+                entity.HasOne(rt => rt.User)
+                      .WithMany(u => u.RefreshTokens)
+                      .HasForeignKey(rt => rt.UserId);
             });
         }
     }

@@ -478,6 +478,7 @@ D:/Coder/Github/BE-ParkingLot/ParkingLotAPI/obj/Debug/net9.0/ref/ParkingLotAPI.d
 /Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/obj/Debug/net9.0/ParkingLotAPI.genruntimeconfig.cache
 /Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/obj/Debug/net9.0/ref/ParkingLotAPI.dll
 /Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/bin/Debug/net9.0/ParkingLotAPI.staticwebassets.runtime.json
+<<<<<<< HEAD
 D:/Coder/Github/BE-ParkingLot/ParkingLotAPI/bin/Debug/net9.0/ParkingLotAPI.staticwebassets.runtime.json
 D:\Coder\Github\BE-ParkingLot\ParkingLotAPI\bin\Debug\net9.0\appsettings.Development.json
 D:\Coder\Github\BE-ParkingLot\ParkingLotAPI\bin\Debug\net9.0\appsettings.json
@@ -640,3 +641,7 @@ D:\Coder\Github\BE-ParkingLot\ParkingLotAPI\obj\Debug\net9.0\refint\ParkingLotAP
 D:\Coder\Github\BE-ParkingLot\ParkingLotAPI\obj\Debug\net9.0\ParkingLotAPI.pdb
 D:\Coder\Github\BE-ParkingLot\ParkingLotAPI\obj\Debug\net9.0\ParkingLotAPI.genruntimeconfig.cache
 D:\Coder\Github\BE-ParkingLot\ParkingLotAPI\obj\Debug\net9.0\ref\ParkingLotAPI.dll
+=======
+/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/bin/Debug/net9.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+>>>>>>> e747c16 (feat: Implement JWT authentication and user identity management)

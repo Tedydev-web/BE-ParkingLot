@@ -19,39 +19,6 @@ namespace ParkingLotAPI.Controllers
             _logger = logger;
         }
 
-        [HttpGet("search")]
-        public async Task<ActionResult<SearchResultDto>> Search(
-            [FromQuery] double latitude,
-            [FromQuery] double longitude,
-            [FromQuery] int radius = 3000)
-        {
-            try
-            {
-                // Validate input
-                if (latitude < -90 || latitude > 90)
-                    return BadRequest(new { message = "Vĩ độ phải nằm trong khoảng -90 đến 90" });
-
-                if (longitude < -180 || longitude > 180)
-                    return BadRequest(new { message = "Kinh độ phải nằm trong khoảng -180 đến 180" });
-
-                if (radius <= 0 || radius > 20000)
-                    return BadRequest(new { message = "Bán kính tìm kiếm phải từ 1m đến 20km" });
-
-                var result = await _parkingLotService.SearchParkingLots(latitude, longitude, radius);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Lỗi khi tìm kiếm bãi đỗ xe");
-                return StatusCode(500, new SearchResultDto
-                {
-                    Status = "ERROR",
-                    Message = "Có lỗi xảy ra khi tìm kiếm bãi đỗ xe",
-                    Results = new List<ParkingLotResponseDto>()
-                });
-            }
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<ParkingLotResponseDto>> GetById(string id)
         {
