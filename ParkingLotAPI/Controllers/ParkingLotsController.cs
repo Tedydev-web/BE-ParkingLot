@@ -81,6 +81,25 @@ namespace ParkingLotAPI.Controllers
                     return BadRequest(new { message = "Thiếu thông tin vị trí từ Goong Map" });
                 }
 
+                // Xử lý thời gian mở cửa
+                if (createDto.IsOpen24Hours)
+                {
+                    createDto.OpeningTime = "00:00";
+                    createDto.ClosingTime = "23:59";
+                }
+                else
+                {
+                    // Validate thời gian nếu không phải 24/7
+                    if (!string.IsNullOrEmpty(createDto.OpeningTime) && !string.IsNullOrEmpty(createDto.ClosingTime))
+                    {
+                        if (!TimeSpan.TryParse(createDto.OpeningTime, out _) || 
+                            !TimeSpan.TryParse(createDto.ClosingTime, out _))
+                        {
+                            return BadRequest(new { message = "Định dạng thời gian không hợp lệ. Vui lòng sử dụng định dạng HH:mm" });
+                        }
+                    }
+                }
+
                 var result = await _parkingLotService.CreateParkingLot(createDto);
                 return CreatedAtAction(
                     nameof(GetById), 

@@ -127,37 +127,41 @@ namespace ParkingLotAPI.Services
             };
         }
 
-        public async Task<ParkingLotResponseDto> CreateParkingLot(CreateParkingLotDto createDto)
+        public async Task<ParkingLotResponseDto> CreateParkingLot(CreateParkingLotDto dto)
         {
             var parkingLot = new ParkingLot
             {
-                Reference = createDto.Place_id,
-                Name = createDto.Name,
-                Address = createDto.Formatted_address,
-                Latitude = createDto.Geometry.Location.Lat,
-                Longitude = createDto.Geometry.Location.Lng,
-                TotalSpaces = createDto.TotalSpaces,
-                AvailableSpaces = createDto.AvailableSpaces,
-                PricePerHour = createDto.PricePerHour,
-                OpeningTime = createDto.OpeningTime,
-                ClosingTime = createDto.ClosingTime,
-                IsOpen24Hours = createDto.IsOpen24Hours,
-                Description = string.IsNullOrEmpty(createDto.Description)
-                    ? $"Bãi đỗ xe tại {createDto.Compound.District}, {createDto.Compound.Province}"
-                    : createDto.Description,
-                ContactNumber = createDto.ContactNumber,
+                Reference = dto.Place_id,
+                Name = dto.Name,
+                Address = dto.Formatted_address,
+                Latitude = dto.Geometry.Location.Lat,
+                Longitude = dto.Geometry.Location.Lng,
+                TotalSpaces = dto.TotalSpaces,
+                AvailableSpaces = dto.AvailableSpaces,
+                PricePerHour = dto.PricePerHour,
+                OpeningTime = dto.IsOpen24Hours ? 
+                    TimeSpan.FromHours(0) : 
+                    ParseTimeString(dto.OpeningTime),
+                ClosingTime = dto.IsOpen24Hours ? 
+                    TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59)) : 
+                    ParseTimeString(dto.ClosingTime),
+                IsOpen24Hours = dto.IsOpen24Hours,
+                Description = string.IsNullOrEmpty(dto.Description)
+                    ? $"Bãi đỗ xe tại {dto.Compound.District}, {dto.Compound.Province}"
+                    : dto.Description,
+                ContactNumber = dto.ContactNumber,
                 Images = new List<ParkingLotImage>()
             };
 
-            parkingLot.Place_id = createDto.Place_id;
+            parkingLot.Place_id = dto.Place_id;
 
             // Xử lý upload hình ảnh
-            if (createDto.Images != null && createDto.Images.Any())
+            if (dto.Images != null && dto.Images.Any())
             {
                 var uploadPath = Path.Combine(_environment.WebRootPath, "uploads", "parkinglots");
                 Directory.CreateDirectory(uploadPath);
 
-                foreach (var image in createDto.Images)
+                foreach (var image in dto.Images)
                 {
                     if (image.Length > 0)
                     {
@@ -436,6 +440,14 @@ namespace ParkingLotAPI.Services
                     Limit = limit
                 }
             };
+        }
+
+        private TimeSpan? ParseTimeString(string timeString)
+        {
+            if (string.IsNullOrEmpty(timeString))
+                return null;
+
+            return TimeSpan.TryParse(timeString, out TimeSpan time) ? time : null;
         }
     }
 } 
