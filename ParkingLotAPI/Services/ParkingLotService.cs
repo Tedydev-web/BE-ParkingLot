@@ -35,59 +35,60 @@ namespace ParkingLotAPI.Services
 
         public async Task<SearchResultDto> SearchParkingLots(double latitude, double longitude, int radius)
         {
-            var parkingLots = await _context.ParkingLots
-                .Include(p => p.Images)
-                .Where(p => CalculateDistance(latitude, longitude, p.Latitude, p.Longitude) <= radius)
-                .ToListAsync();
-
-            if (!parkingLots.Any())
+            try 
             {
-                return new SearchResultDto 
-                { 
-                    Status = "ZERO_RESULTS", 
-                    Results = new List<ParkingLotResponseDto>() 
+                var parkingLots = await _context.ParkingLots
+                    .Include(p => p.Images)
+                    .Where(p => CalculateDistance(latitude, longitude, p.Latitude, p.Longitude) <= radius)
+                    .ToListAsync();
+
+                if (!parkingLots.Any())
+                {
+                    return new SearchResultDto 
+                    { 
+                        Status = "ZERO_RESULTS", 
+                        Results = new List<ParkingLotResponseDto>() 
+                    };
+                }
+
+                var results = parkingLots.Select(p => new ParkingLotResponseDto
+                {
+                    Place_id = p.Id,
+                    Name = p.Name,
+                    Formatted_address = p.Address,
+                    Geometry = new Geometry
+                    {
+                        Location = new Location
+                        {
+                            Lat = p.Latitude,
+                            Lng = p.Longitude
+                        }
+                    },
+                    Rating = p.Rating,
+                    Opening_hours = BuildOpeningHours(p),
+                    Photos = p.Images?.Select(img => new Photo
+                    {
+                        Photo_reference = img.ImageUrl,
+                        IsMain = img.IsMain,
+                        CreatedAt = img.CreatedAt
+                    }).ToList(),
+                    Formatted_phone_number = p.ContactNumber,
+                    Total_spaces = p.TotalSpaces,
+                    Available_spaces = p.AvailableSpaces,
+                    Price_per_hour = p.PricePerHour
+                }).ToList();
+
+                return new SearchResultDto
+                {
+                    Status = "OK",
+                    Results = results
                 };
             }
-
-            var results = parkingLots.Select(p => new ParkingLotResponseDto
+            catch (Exception ex)
             {
-                Place_id = p.Id,
-                Name = p.Name,
-                Formatted_address = p.Address,
-                Geometry = new Geometry
-                {
-                    Location = new Location
-                    {
-                        Lat = p.Latitude,
-                        Lng = p.Longitude
-                    }
-                },
-                Rating = p.Rating,
-                Opening_hours = new OpeningHours
-                {
-                    Open_now = p.IsOpen24Hours || IsOpenNow(p.OpeningTime, p.ClosingTime),
-                    Weekday_text = new[]
-                    {
-                        $"Giờ mở cửa: {(p.IsOpen24Hours ? "24/7" : $"{p.OpeningTime} - {p.ClosingTime}")}"
-                    }
-                },
-                Photos = p.Images?.Select(img => new Photo
-                {
-                    Photo_reference = img.ImageUrl,
-                    IsMain = img.IsMain,
-                    CreatedAt = img.CreatedAt
-                }).ToList(),
-                Formatted_phone_number = p.ContactNumber,
-                Total_spaces = p.TotalSpaces,
-                Available_spaces = p.AvailableSpaces,
-                Price_per_hour = p.PricePerHour
-            }).ToList();
-
-            return new SearchResultDto
-            {
-                Status = "OK",
-                Results = results
-            };
+                _logger.LogError(ex, "Lỗi khi tìm kiếm bãi đỗ xe: {Message}", ex.Message);
+                throw;
+            }
         }
 
         public async Task<ParkingLotResponseDto> GetParkingLotById(string id)
@@ -215,14 +216,7 @@ namespace ParkingLotAPI.Services
                     },
                     Rating = p.Rating,
                     Types = new[] { "parking" },
-                    Opening_hours = new OpeningHours
-                    {
-                        Open_now = p.IsOpen24Hours || IsOpenNow(p.OpeningTime, p.ClosingTime),
-                        Weekday_text = new[]
-                        {
-                            $"Giờ mở cửa: {(p.IsOpen24Hours ? "24/7" : $"{p.OpeningTime:hh\\:mm} - {p.ClosingTime:hh\\:mm}")}"
-                        }
-                    },
+                    Opening_hours = BuildOpeningHours(p),
                     Photos = p.Images?
                         .OrderByDescending(img => img.IsMain)
                         .ThenBy(img => img.CreatedAt)
@@ -386,14 +380,7 @@ namespace ParkingLotAPI.Services
                     }
                 },
                 Rating = p.Rating,
-                Opening_hours = new OpeningHours
-                {
-                    Open_now = p.IsOpen24Hours || IsOpenNow(p.OpeningTime, p.ClosingTime),
-                    Weekday_text = new[]
-                    {
-                        $"Giờ mở cửa: {(p.IsOpen24Hours ? "24/7" : $"{p.OpeningTime} - {p.ClosingTime}")}"
-                    }
-                },
+                Opening_hours = BuildOpeningHours(p),
                 Photos = p.Images?.Select(img => new Photo
                 {
                     Photo_reference = img.ImageUrl,
@@ -516,14 +503,7 @@ namespace ParkingLotAPI.Services
                 },
                 Types = parkingLot.Types?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "parking" },
                 Rating = parkingLot.Rating,
-                Opening_hours = new OpeningHours
-                {
-                    Open_now = parkingLot.IsOpen24Hours || IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime),
-                    Weekday_text = new[]
-                    {
-                        $"Giờ mở cửa: {(parkingLot.IsOpen24Hours ? "24/7" : $"{parkingLot.OpeningTime} - {parkingLot.ClosingTime}")}"
-                    }
-                },
+                Opening_hours = BuildOpeningHours(parkingLot),
                 Photos = parkingLot.Images?.Select(img => new Photo
                 {
                     Photo_reference = img.ImageUrl,
@@ -536,6 +516,43 @@ namespace ParkingLotAPI.Services
                 Price_per_hour = parkingLot.PricePerHour,
                 Description = parkingLot.Description
             };
+        }
+
+        private OpeningHours BuildOpeningHours(ParkingLot parkingLot)
+        {
+            string formatTime(TimeSpan? time) => 
+                parkingLot.IsOpen24Hours ? "24/7" : 
+                time?.ToString(@"HH\:mm") ?? "Chưa cập nhật";
+
+            return new OpeningHours
+            {
+                Open_now = IsOpenNow(parkingLot.OpeningTime, parkingLot.ClosingTime, parkingLot.IsOpen24Hours),
+                Operating_hours = new OperatingTime
+                {
+                    Open = formatTime(parkingLot.OpeningTime),
+                    Close = formatTime(parkingLot.ClosingTime),
+                    Is24Hours = parkingLot.IsOpen24Hours
+                }
+            };
+        }
+
+        private bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime, bool isOpen24Hours)
+        {
+            if (isOpen24Hours)
+                return true;
+
+            if (!openingTime.HasValue || !closingTime.HasValue)
+                return false;
+            
+            var now = DateTime.Now.TimeOfDay;
+            
+            // Xử lý trường hợp qua ngày
+            if (closingTime.Value < openingTime.Value)
+            {
+                return now >= openingTime.Value || now <= closingTime.Value;
+            }
+
+            return now >= openingTime.Value && now <= closingTime.Value;
         }
     }
 } 
