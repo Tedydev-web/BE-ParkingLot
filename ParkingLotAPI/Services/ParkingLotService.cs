@@ -17,17 +17,20 @@ namespace ParkingLotAPI.Services
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<ParkingLotService> _logger;
+        private readonly IConfiguration _configuration;
 
         public ParkingLotService(
             ApplicationDbContext context,
             IMapper mapper,
             IWebHostEnvironment environment,
-            ILogger<ParkingLotService> logger)
+            ILogger<ParkingLotService> logger,
+            IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
             _environment = environment;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<SearchResultDto> SearchParkingLots(double latitude, double longitude, int radius)
@@ -143,7 +146,7 @@ namespace ParkingLotAPI.Services
             return await GetParkingLotById(parkingLot.Id);
         }
 
-        private bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime)
+        private static bool IsOpenNow(TimeSpan? openingTime, TimeSpan? closingTime)
         {
             if (!openingTime.HasValue || !closingTime.HasValue)
                 return false;
@@ -186,17 +189,77 @@ namespace ParkingLotAPI.Services
 
         public async Task<SearchResultDto> GetAllParkingLots()
         {
-            var parkingLots = await _context.ParkingLots
-                .Include(p => p.Images)
-                .ToListAsync();
-
-            var results = parkingLots.Select(MapToResponseDto).ToList();
-
-            return new SearchResultDto
+            try 
             {
-                Status = "OK",
-                Results = results
-            };
+                var parkingLots = await _context.ParkingLots
+                    .Include(p => p.Images)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                var baseUrl = $"{_configuration["BaseUrl"]}".TrimEnd('/');
+
+                var results = parkingLots.Select(p => new ParkingLotResponseDto
+                {
+                    Id = p.Id,
+                    Place_id = p.Place_id,
+                    Reference = p.Reference,
+                    Name = p.Name,
+                    Formatted_address = p.Address,
+                    Geometry = new Geometry
+                    {
+                        Location = new Location
+                        {
+                            Lat = p.Latitude,
+                            Lng = p.Longitude
+                        }
+                    },
+                    Rating = p.Rating,
+                    Types = new[] { "parking" },
+                    Opening_hours = new OpeningHours
+                    {
+                        Open_now = p.IsOpen24Hours || IsOpenNow(p.OpeningTime, p.ClosingTime),
+                        Weekday_text = new[]
+                        {
+                            $"Giờ mở cửa: {(p.IsOpen24Hours ? "24/7" : $"{p.OpeningTime:hh\\:mm} - {p.ClosingTime:hh\\:mm}")}"
+                        }
+                    },
+                    Photos = p.Images?
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.CreatedAt)
+                        .Select(img => new Photo
+                        {
+                            Photo_reference = $"{baseUrl}{img.ImageUrl}",
+                            IsMain = img.IsMain,
+                            CreatedAt = img.CreatedAt
+                        })
+                        .ToList() ?? new List<Photo>(),
+                    Formatted_phone_number = p.ContactNumber,
+                    Total_spaces = p.TotalSpaces,
+                    Available_spaces = p.AvailableSpaces,
+                    Price_per_hour = p.PricePerHour,
+                    Description = p.Description,
+                    IsOpen24Hours = p.IsOpen24Hours,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt
+                }).ToList();
+
+                return new SearchResultDto
+                {
+                    Status = results.Any() ? "OK" : "ZERO_RESULTS",
+                    Message = results.Any() ? null : "Không tìm thấy bãi đỗ xe nào",
+                    Results = results,
+                    Metadata = new SearchMetadata
+                    {
+                        Total = results.Count,
+                        Limit = results.Count
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi lấy danh sách bãi đỗ xe: {Message}", ex.Message);
+                throw;
+            }
         }
 
         public async Task<ParkingLotResponseDto> UpdateParkingLot(string id, CreateParkingLotDto updateDto)

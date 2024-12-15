@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png",
+      "PackagePath": "staticwebassets/uploads/parkinglots/8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9/pl_8ce5eb2a-4e80-4163-b7e4-dbcf23e6f3c9_diểm-dỗ-xe-05_main_20241215_103237.png"
+    },
+    {
       "Id": "/Users/tedydev/Workhome/GitHub/parkinglot_managerment/BE-ParkingLot/ParkingLotAPI/wwwroot/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png",
       "PackagePath": "staticwebassets/uploads/parkinglots/c2e412fd-75ba-4196-ba9b-e2f26f1889fe/pl_c2e412fd-75ba-4196-ba9b-e2f26f1889fe_diểm-dỗ-xe-01_main_20241215_102221.png"
     },

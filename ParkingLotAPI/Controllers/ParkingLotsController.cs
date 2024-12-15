@@ -49,23 +49,44 @@ namespace ParkingLotAPI.Controllers
             {
                 var parkingLot = await _parkingLotService.GetParkingLotById(id);
                 if (parkingLot == null)
-                    return NotFound(new SearchResultDto 
+                {
+                    return NotFound(new
                     { 
                         Status = "NOT_FOUND",
                         Message = "Không tìm thấy bãi đỗ xe",
-                        Results = new List<ParkingLotResponseDto>()
+                        Result = (ParkingLotResponseDto)null
                     });
-                
-                return Ok(parkingLot);
+                }
+
+                // Kiểm tra trạng thái hoạt động
+                var isOpen = parkingLot.Opening_hours?.Open_now ?? false;
+                var availableSpaces = parkingLot.Available_spaces ?? 0;
+
+                return Ok(new
+                {
+                    Status = "OK",
+                    Message = (string)null,
+                    Result = new
+                    {
+                        parkingLot,
+                        Status = new
+                        {
+                            IsOpen = isOpen,
+                            Message = isOpen ? "Đang mở cửa" : "Đã đóng cửa",
+                            AvailableSpaces = availableSpaces,
+                            IsFull = availableSpaces == 0
+                        }
+                    }
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Lỗi khi lấy thông tin bãi đỗ xe");
-                return BadRequest(new SearchResultDto 
+                _logger.LogError(ex, "Lỗi khi lấy thông tin bãi đỗ xe: {Id}", id);
+                return StatusCode(500, new
                 { 
                     Status = "ERROR",
                     Message = "Có lỗi xảy ra khi lấy thông tin bãi đỗ xe",
-                    Results = new List<ParkingLotResponseDto>()
+                    Result = (ParkingLotResponseDto)null
                 });
             }
         }
@@ -147,12 +168,22 @@ namespace ParkingLotAPI.Controllers
             try
             {
                 var result = await _parkingLotService.GetAllParkingLots();
-                return Ok(result);
+                return Ok(new SearchResultDto
+                {
+                    Status = result.Results.Any() ? "OK" : "ZERO_RESULTS",
+                    Message = result.Results.Any() ? null : "Không tìm thấy bãi đỗ xe nào",
+                    Results = result.Results,
+                    Metadata = new SearchMetadata
+                    {
+                        Total = result.Results.Count,
+                        Limit = result.Results.Count
+                    }
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Lỗi khi lấy danh sách bãi đỗ xe");
-                return BadRequest(new SearchResultDto 
+                return StatusCode(500, new SearchResultDto 
                 { 
                     Status = "ERROR",
                     Message = "Có lỗi xảy ra khi lấy danh sách bãi đỗ xe",

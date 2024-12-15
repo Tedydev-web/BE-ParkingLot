@@ -6,6 +6,7 @@ using ParkingLotAPI.Services;
 using ParkingLotAPI.Models;
 using System.Text.Json.Serialization;
 using ParkingLotAPI.Options;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,6 +97,14 @@ app.UseStaticFiles(new StaticFileOptions
         ctx.Context.Response.Headers.Append("Pragma", "no-cache");
         ctx.Context.Response.Headers.Append("Expires", "-1");
     }
+});
+
+// Serve static files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+    RequestPath = ""
 });
 
 app.UseHttpsRedirection();
